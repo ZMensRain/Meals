@@ -23,7 +23,7 @@ class _MealScreenState extends State<MealScreen> {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => const ShareDialog(),
+                builder: (context) => ShareDialog(widget.meal),
               );
             },
             icon: const Icon(Icons.share),

@@ -1,4 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:converter/converter.dart';
+
+import 'package:flutter/services.dart';
+
+import 'package:pdf/widgets.dart' as pdf;
 
 enum MeasurementSystem { metric, imperial }
 
@@ -91,6 +97,85 @@ class Meal {
       }
     }
     return output;
+  }
+
+  Future<Uint8List> makePdf(MeasurementSystem measurementSystem) async {
+    final pdfd = pdf.Document(
+      title: title,
+      creator: "Meal planner",
+    );
+
+    pdfd.addPage(
+      pdf.MultiPage(
+        build: (context) => [
+          pdf.Text(
+            title,
+            style: const pdf.TextStyle().copyWith(
+              fontSize: 35,
+              fontWeight: pdf.FontWeight.bold,
+            ),
+            textAlign: pdf.TextAlign.left,
+          ),
+          pdf.Row(
+            children: [
+              ...tags.map(
+                (e) => pdf.Padding(
+                  padding: const pdf.EdgeInsets.all(4),
+                  child: pdf.Text(
+                    e,
+                    style: const pdf.TextStyle().copyWith(
+                      fontStyle: pdf.FontStyle.italic,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          pdf.Text(
+            " Calories per serving: $caloriesPerServing cal"
+                .replaceAll(".0 ", " "),
+            style: const pdf.TextStyle().copyWith(fontSize: 13),
+          ),
+          pdf.Text(
+            " Prep time: ${formatDuration(prepTime)}",
+            style: const pdf.TextStyle().copyWith(fontSize: 13),
+          ),
+          pdf.Text(
+            " Cook time: ${formatDuration(cookTime)}",
+            style: const pdf.TextStyle().copyWith(fontSize: 13),
+          ),
+          pdf.SizedBox(height: 8),
+          pdf.Text(
+            "Ingredients",
+            style: const pdf.TextStyle().copyWith(
+              fontWeight: pdf.FontWeight.bold,
+              fontSize: 25,
+              lineSpacing: 2,
+            ),
+          ),
+          pdf.Divider(endIndent: 8),
+          ...formatIngredients(measurementSystem).map(
+            (e) => pdf.Text(e,
+                style: const pdf.TextStyle().copyWith(fontSize: 15)),
+          ),
+          pdf.SizedBox(height: 8),
+          pdf.Text(
+            "Instructions",
+            style: const pdf.TextStyle().copyWith(
+              fontWeight: pdf.FontWeight.bold,
+              fontSize: 25,
+              lineSpacing: 2,
+            ),
+          ),
+          pdf.Divider(endIndent: 8),
+          for (var i = 0; i < instructions.length; i++)
+            pdf.Text("${i + 1}. ${instructions[i]}",
+                style: const pdf.TextStyle().copyWith(fontSize: 13)),
+        ],
+      ),
+    );
+
+    return pdfd.save();
   }
 }
 
