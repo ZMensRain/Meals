@@ -17,7 +17,11 @@ class ShareDialog extends StatelessWidget {
         ElevatedButton(
           onPressed: () async {
             final data = await meal.makePdf(MeasurementSystem.imperial);
-            final file = XFile.fromData(data, mimeType: "pdf");
+            final file = XFile.fromData(
+              data,
+              name: "${meal.title} recipe",
+              mimeType: "pdf",
+            );
 
             var r = await Share.shareXFiles([file]);
 
