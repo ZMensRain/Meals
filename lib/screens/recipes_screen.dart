@@ -83,13 +83,23 @@ class _MealsScreenState extends State<MealsScreen> {
         "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.zupans.com%2Fapp%2Fuploads%2F2020%2F05%2FiStock-174990644-4096x2731.jpg&f=1&nofb=1&ipt=e3bee05db5e34ff3f50dd99a6346f6e096d69afe0f8169c94502b17fe3eb0655&ipo=images",
   );
 
+  bool isUserSearching = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    isUserSearching = !isUserSearching;
+                  });
+                },
+                icon: const Icon(Icons.search)),
+            const Spacer(),
             IconButton(onPressed: () {}, icon: const Icon(Icons.sort)),
             IconButton(
                 onPressed: () {
@@ -102,6 +112,7 @@ class _MealsScreenState extends State<MealsScreen> {
                 icon: const Icon(Icons.add))
           ],
         ),
+        if (isUserSearching) const Placeholder(),
         Expanded(
           child: ListView.builder(
             itemCount: 1,
