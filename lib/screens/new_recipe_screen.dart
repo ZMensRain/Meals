@@ -60,11 +60,22 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: "Recipe name",
-                  ),
-                  onSaved: (newValue) => _enteredTitle = newValue!,
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: const Icon(Icons.camera_alt),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          labelText: "Recipe name",
+                        ),
+                        onSaved: (newValue) => _enteredTitle = newValue!,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
                   height: 80,
