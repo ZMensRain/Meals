@@ -84,8 +84,8 @@ class Ingredient {
   }
 }
 
-class Meal {
-  Meal({
+class Recipe {
+  Recipe({
     required this.servingSize,
     required this.title,
     required this.ingredients,
@@ -194,7 +194,7 @@ class Meal {
   }
 }
 
-void createShoppingList(List<Meal> meals) {
+void createShoppingList(List<Recipe> meals) {
   final List<Ingredient> allIngredients = [];
 
   for (var meal in meals) {

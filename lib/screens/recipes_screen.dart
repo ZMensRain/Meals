@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/meal.dart';
-import 'package:meal_planner/screens/meal_screen.dart';
+import 'package:meal_planner/screens/recipe_screen.dart';
 import 'package:meal_planner/screens/new_recipe_screen.dart';
-import 'package:meal_planner/widgets/meal_card.dart';
+import 'package:meal_planner/widgets/recipe_card.dart';
 
 class MealsScreen extends StatefulWidget {
   const MealsScreen({super.key});
@@ -12,7 +12,7 @@ class MealsScreen extends StatefulWidget {
 }
 
 class _MealsScreenState extends State<MealsScreen> {
-  final Meal meal = Meal(
+  final Recipe meal = Recipe(
     caloriesPerServing: 100,
     servingSize: 4,
     title: "Mac and Cheese",

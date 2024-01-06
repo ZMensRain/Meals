@@ -6,7 +6,7 @@ import 'package:share_plus/share_plus.dart';
 class ShareDialog extends StatelessWidget {
   const ShareDialog(this.meal, {super.key});
 
-  final Meal meal;
+  final Recipe meal;
 
   @override
   Widget build(BuildContext context) {

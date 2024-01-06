@@ -4,7 +4,7 @@ import 'package:transparent_image/transparent_image.dart';
 
 class MealCard extends StatelessWidget {
   const MealCard(this.meal, {super.key, required this.onTaped});
-  final Meal meal;
+  final Recipe meal;
   final void Function() onTaped;
 
   @override

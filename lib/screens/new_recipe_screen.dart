@@ -20,7 +20,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   void _createRecipe() {
     _isRecipeVaild();
 
-    Meal(
+    Recipe(
         servingSize: _enteredServingNumber,
         title: _enteredTitle,
         ingredients: ingredients,

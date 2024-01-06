@@ -4,7 +4,7 @@ import 'package:meal_planner/widgets/share_dialog.dart';
 
 class MealScreen extends StatefulWidget {
   const MealScreen(this.meal, {super.key});
-  final Meal meal;
+  final Recipe meal;
 
   @override
   State<MealScreen> createState() => _MealScreenState();
