@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   converter: ^0.4.0
+  duration_picker: ^1.1.1
   flutter:
     sdk: flutter
   pdf: ^3.10.7

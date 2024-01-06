@@ -1,4 +1,3 @@
-import 'package:converter/converter.dart';
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/meal.dart';
 import 'package:meal_planner/screens/meal_screen.dart';
@@ -18,9 +17,9 @@ class _MealsScreenState extends State<MealsScreen> {
     servingSize: 4,
     title: "Mac and Cheese",
     ingredients: [
-      Ingredient("eggs", null, amount: 3),
-      Ingredient("sugar", Mass(100, "g")),
-      Ingredient("water", Volume(0.954, "l")),
+      Ingredient("eggs", Units.amount, amount: 3),
+      Ingredient("sugar", Units.g, amount: 100),
+      Ingredient("water", Units.l, amount: 0.954),
     ],
     instructions: [
       "First",

@@ -8,6 +8,8 @@ import 'package:pdf/widgets.dart' as pdf;
 
 enum MeasurementSystem { metric, imperial }
 
+enum Units { amount, ml, l, g, kg, tsp, tbsp, cup, oz, lb }
+
 String formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
   String twoDigitMinutes = duration.inMinutes.remainder(60).abs().toString();
@@ -21,10 +23,65 @@ String formatDuration(Duration duration) {
 }
 
 class Ingredient {
-  Ingredient(this.name, this.quantity, {this.amount = 1});
+  Ingredient(this.name, this.unit, {required this.amount});
   final String name;
-  final Quantity? quantity;
-  final int amount;
+  final Units unit;
+  final double amount;
+  String format(MeasurementSystem system) {
+    if (unit == Units.amount) {
+      return "$amount $name";
+    }
+
+    late Quantity quantity;
+
+    if (unit == Units.g ||
+        unit == Units.kg ||
+        unit == Units.oz ||
+        unit == Units.lb) {
+      quantity = Mass(amount, unit.name);
+    } else {
+      quantity = Volume(amount, unit.name);
+    }
+
+    switch (quantity.runtimeType) {
+      case Volume:
+        if (system == MeasurementSystem.metric) {
+          final v = quantity.valueIn("l");
+          if (v < 1) {
+            return "${quantity.valueIn("ml").floorToDouble()}ml $name";
+          } else {
+            return ("${v.floorToDouble()}L $name");
+          }
+        } else {
+          var tbsp = quantity.valueIn("tbsp");
+          if (tbsp < 3) {
+            return ("${tbsp * 3.round()}tsp $name");
+          }
+          if (tbsp >= 4) {
+            var cups = (tbsp * 0.0625).round();
+            return ("$cups${cups > 1 ? "cups" : "cup"} $name ");
+          }
+        }
+        break;
+      case Mass:
+        if (system == MeasurementSystem.metric) {
+          var grams = quantity.valueIn("g");
+          if (grams >= 1000) {
+            return ("${grams / 1000}kg $name");
+          } else {
+            return ("${grams}g $name");
+          }
+        } else {
+          var ounces = quantity.valueIn("oz");
+          if (ounces >= 16) {
+            return ("${(ounces / 16).round()}lb $name");
+          } else {
+            return ("${ounces.round()}oz $name");
+          }
+        }
+    }
+    return "$amount$unit $name";
+  }
 }
 
 class Meal {
@@ -39,9 +96,9 @@ class Meal {
     this.imageUrl,
     this.tags = const [],
   });
-  final String title;
-  final int servingSize;
-  final double caloriesPerServing;
+  final String title; //
+  final int servingSize; //
+  final double caloriesPerServing; //
   final List<Ingredient> ingredients;
   final List instructions;
   final Duration prepTime;
@@ -52,49 +109,7 @@ class Meal {
   List<String> formatIngredients(MeasurementSystem system) {
     final List<String> output = [];
     for (var i in ingredients) {
-      if (i.quantity == null) {
-        output.add("${i.amount} ${i.name}");
-      }
-      switch (i.quantity.runtimeType) {
-        case Volume:
-          if (system == MeasurementSystem.metric) {
-            final v = i.quantity!.valueIn("l");
-            if (v < 1) {
-              output.add(
-                  "${i.quantity!.valueIn("ml").floorToDouble()}ml ${i.name}");
-            } else {
-              output.add("${v.floorToDouble()}L ${i.name}");
-            }
-          } else {
-            var tbsp = i.quantity!.valueIn("tbsp");
-            if (tbsp < 3) {
-              output.add("${tbsp * 3.round()}tsp ${i.name}");
-            }
-            if (tbsp >= 4) {
-              var cups = (tbsp * 0.0625).round();
-              output.add("$cups${cups > 1 ? "cups" : "cup"} ${i.name} ");
-            }
-          }
-          break;
-        case Mass:
-          if (system == MeasurementSystem.metric) {
-            var grams = i.quantity!.valueIn("g");
-            if (grams >= 1000) {
-              output.add("${grams / 1000}kg ${i.name}");
-            } else {
-              output.add("${grams}g ${i.name}");
-            }
-          } else {
-            var ounces = i.quantity!.valueIn("oz");
-            if (ounces >= 16) {
-              output.add("${(ounces / 16).round()}lb ${i.name}");
-            } else {
-              output.add("${ounces.round()}oz ${i.name}");
-            }
-          }
-          break;
-        default:
-      }
+      output.add(i.format(system));
     }
     return output;
   }
