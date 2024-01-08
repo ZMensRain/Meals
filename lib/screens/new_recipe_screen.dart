@@ -14,11 +14,35 @@ class NewRecipeScreen extends StatefulWidget {
 
 class _NewRecipeScreenState extends State<NewRecipeScreen> {
   bool _isRecipeVaild() {
-    throw UnimplementedError();
+    _formKey.currentState!.validate();
+    if (instructions.isEmpty || ingredients.isEmpty) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Ingredients and instructions must be set."),
+        ),
+      );
+      return false;
+    }
+    if (_cookTime == null ||
+        _cookTime == Duration.zero ||
+        _prepTime == null ||
+        _prepTime == Duration.zero) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Cook and prep time must be set."),
+        ),
+      );
+      return false;
+    }
+    return true;
   }
 
   void _createRecipe() {
-    _isRecipeVaild();
+    if (!_isRecipeVaild()) {
+      return;
+    }
 
     Recipe(
         servingSize: _enteredServingNumber,
@@ -30,15 +54,14 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
         caloriesPerServing: _enteredCaloriesPerServing);
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   String _enteredTitle = "";
   int _enteredServingNumber = 0;
   double _enteredCaloriesPerServing = 0;
   Duration? _cookTime = Duration.zero;
   Duration? _prepTime = Duration.zero;
-  List<String> instructions = [
-    "test",
-    "ingafjhafhlsdhfjlhlshdjhfj slghflsjhgflsh sghgjflhslfh hsgljshgjhslg hsghshrqgtjsdgifh jsfghsghikfousgh sgjshg jsjfgishgsjgoushgj",
-  ];
+  List<String> instructions = [];
   List<Ingredient> ingredients = [];
 
   @override
@@ -55,6 +78,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
       ),
       body: SingleChildScrollView(
         child: Form(
+          key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -72,6 +96,12 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         decoration: const InputDecoration(
                           labelText: "Recipe name",
                         ),
+                        validator: (value) {
+                          if (value == null || value.trim().length < 2) {
+                            return "Name must be atleast 2 characters long";
+                          }
+                          return null;
+                        },
                         onSaved: (newValue) => _enteredTitle = newValue!,
                       ),
                     ),
@@ -87,6 +117,14 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           decoration: const InputDecoration(
                             labelText: "Servings",
                           ),
+                          validator: (value) {
+                            if (value == null ||
+                                double.tryParse(value) == null ||
+                                double.parse(value) <= 0) {
+                              return "Servings must be a number greater than 0";
+                            }
+                            return null;
+                          },
                           onSaved: (newValue) =>
                               _enteredServingNumber = int.parse(newValue!),
                         ),
@@ -99,6 +137,14 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                           decoration: const InputDecoration(
                             labelText: "Calories per Serving",
                           ),
+                          validator: (value) {
+                            if (value == null ||
+                                double.tryParse(value) == null ||
+                                double.parse(value) <= 0) {
+                              return "Must be greater than 0";
+                            }
+                            return null;
+                          },
                           onSaved: (newValue) => _enteredCaloriesPerServing =
                               double.parse(newValue!),
                         ),
