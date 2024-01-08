@@ -17,6 +17,20 @@ class IngredientSection extends StatelessWidget {
 
   final void Function(Ingredient ingredient, int index) onEdit;
 
+  void showNewSheet(BuildContext context) {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => NewIngredientSheet(
+        null,
+        onIngredientAdded: (ingredient) {
+          onAdd(ingredient);
+        },
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -27,19 +41,7 @@ class IngredientSection extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineMedium),
             const Spacer(),
             IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  useSafeArea: true,
-                  isScrollControlled: true,
-                  context: context,
-                  builder: (context) => NewIngredientSheet(
-                    null,
-                    onIngredientAdded: (ingredient) {
-                      onAdd(ingredient);
-                    },
-                  ),
-                );
-              },
+              onPressed: () => showNewSheet(context),
               icon: const Icon(Icons.add),
             ),
           ],
@@ -47,26 +49,46 @@ class IngredientSection extends StatelessWidget {
         const Divider(),
         SizedBox(
           height: 250,
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(thickness: 0.5),
-            itemCount: ingredients.length,
-            itemBuilder: (context, index) => IngredientTile(
-              ingredients[index],
-              () {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  context: context,
-                  builder: (context) => NewIngredientSheet(
+          child: ingredients.isEmpty
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Nothing here yet...",
+                      style: const TextStyle().copyWith(
+                          fontSize: 30,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withOpacity(0.4)),
+                    ),
+                    IconButton(
+                      onPressed: () => showNewSheet(context),
+                      icon: const Icon(Icons.add, size: 48),
+                    ),
+                  ],
+                )
+              : ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      const Divider(thickness: 0.5),
+                  itemCount: ingredients.length,
+                  itemBuilder: (context, index) => IngredientTile(
                     ingredients[index],
-                    onIngredientAdded: (ingredient) {
-                      onEdit(ingredient, index);
+                    () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        context: context,
+                        builder: (context) => NewIngredientSheet(
+                          ingredients[index],
+                          onIngredientAdded: (ingredient) {
+                            onEdit(ingredient, index);
+                          },
+                        ),
+                      );
                     },
                   ),
-                );
-              },
-            ),
-          ),
+                ),
         ),
       ],
     );

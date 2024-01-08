@@ -7,6 +7,19 @@ class InstructionSection extends StatelessWidget {
   final List<String> instructions;
   final void Function(String instruction) onAdd;
   final void Function(String instruction, int index) onEdit;
+
+  void showNewSheet(BuildContext context) {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      useSafeArea: true,
+      context: context,
+      builder: (context) => NewInstructionSheet(
+        null,
+        onAdd: onAdd,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -17,17 +30,7 @@ class InstructionSection extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineMedium),
             const Spacer(),
             IconButton(
-              onPressed: () {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  context: context,
-                  builder: (context) => NewInstructionSheet(
-                    null,
-                    onAdd: onAdd,
-                  ),
-                );
-              },
+              onPressed: () => showNewSheet(context),
               icon: const Icon(Icons.add),
             )
           ],
@@ -35,28 +38,47 @@ class InstructionSection extends StatelessWidget {
         const Divider(),
         SizedBox(
           height: 250,
-          child: ListView.builder(
-            itemCount: instructions.length,
-            itemBuilder: (context, index) => InkWell(
-              onLongPress: () {
-                showModalBottomSheet(
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  context: context,
-                  builder: (context) => NewInstructionSheet(
-                    instructions[index],
-                    onAdd: (instruction) => onEdit(instruction, index),
+          child: instructions.isEmpty
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Nothing here yet...",
+                      style: const TextStyle().copyWith(
+                          fontSize: 30,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onBackground
+                              .withOpacity(0.4)),
+                    ),
+                    IconButton(
+                      onPressed: () => showNewSheet(context),
+                      icon: const Icon(Icons.add, size: 48),
+                    ),
+                  ],
+                )
+              : ListView.builder(
+                  itemCount: instructions.length,
+                  itemBuilder: (context, index) => InkWell(
+                    onLongPress: () {
+                      showModalBottomSheet(
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        context: context,
+                        builder: (context) => NewInstructionSheet(
+                          instructions[index],
+                          onAdd: (instruction) => onEdit(instruction, index),
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "${index + 1}. ${instructions[index]}",
+                      ),
+                    ),
                   ),
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "${index + 1}. ${instructions[index]}",
                 ),
-              ),
-            ),
-          ),
         ),
       ],
     );
