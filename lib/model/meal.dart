@@ -34,12 +34,16 @@ class Ingredient {
 
     late Quantity quantity;
 
+    if (unit == Units.cup) {
+      quantity = Volume(amount * 16, "tbsp");
+    }
+
     if (unit == Units.g ||
         unit == Units.kg ||
         unit == Units.oz ||
         unit == Units.lb) {
       quantity = Mass(amount, unit.name);
-    } else {
+    } else if (unit != Units.cup) {
       quantity = Volume(amount, unit.name);
     }
 
