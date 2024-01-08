@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meal_planner/screens/recipes_screen.dart';
+import 'package:meal_planner/screens/week_screen.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
@@ -15,7 +16,12 @@ class _TabScreenState extends State<TabScreen> {
     return Scaffold(
       appBar: AppBar(title: Text(tab == 0 ? "Recipes" : "Week")),
       bottomNavigationBar: BottomNavigationBar(
-        onTap: (value) {},
+        currentIndex: tab,
+        onTap: (value) {
+          setState(() {
+            tab = value;
+          });
+        },
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.fastfood),
@@ -27,7 +33,7 @@ class _TabScreenState extends State<TabScreen> {
           ),
         ],
       ),
-      body: const MealsScreen(),
+      body: tab == 0 ? const MealsScreen() : const WeekScreen(),
     );
   }
 }
