@@ -1,5 +1,6 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/meal.dart';
 
 import 'package:meal_planner/widgets/sections/ingredient_section.dart';
@@ -13,7 +14,7 @@ class NewRecipeScreen extends StatefulWidget {
 }
 
 class _NewRecipeScreenState extends State<NewRecipeScreen> {
-  bool _isRecipeVaild() {
+  bool _isRecipeValid() {
     _formKey.currentState!.validate();
     if (instructions.isEmpty || ingredients.isEmpty) {
       ScaffoldMessenger.of(context).clearSnackBars();
@@ -40,7 +41,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   }
 
   void _createRecipe() {
-    if (!_isRecipeVaild()) {
+    if (!_isRecipeValid()) {
       return;
     }
 
@@ -98,7 +99,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
                         ),
                         validator: (value) {
                           if (value == null || value.trim().length < 2) {
-                            return "Name must be atleast 2 characters long";
+                            return "Name must be at least 2 characters long";
                           }
                           return null;
                         },

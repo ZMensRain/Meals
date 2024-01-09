@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/ingredient.dart';
+
 import 'package:meal_planner/widgets/ingredient_tile.dart';
 import 'package:meal_planner/widgets/sheets/new_ingredient_sheet.dart';
 

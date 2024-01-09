@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/ingredient.dart';
 
 class IngredientTile extends StatelessWidget {
   const IngredientTile(this.ingredient, this.onLongPress, {super.key});

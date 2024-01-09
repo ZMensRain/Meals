@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/ingredient.dart';
 
 class NewIngredientSheet extends StatefulWidget {
   const NewIngredientSheet(
@@ -70,7 +70,7 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                 onSaved: (newValue) => _enteredName = newValue!,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return "enter a vaild ingredient";
+                    return "enter a valid ingredient";
                   }
                   return null;
                 },
@@ -105,7 +105,7 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
                 onSaved: (newValue) => _enteredAmount = double.parse(newValue!),
                 validator: (value) {
                   if (value == null || double.tryParse(value) == null) {
-                    return "Please enter a vaild number";
+                    return "Please enter a valid number";
                   }
                   if (double.parse(value) <= 0) {
                     return "Value must be greater than 0";

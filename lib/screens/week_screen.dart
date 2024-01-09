@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/meal.dart';
 import 'package:meal_planner/screens/weekday_screen.dart';
 import 'package:meal_planner/widgets/weekday_card.dart';

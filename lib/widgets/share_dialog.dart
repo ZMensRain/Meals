@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/meal.dart';
 
 import 'package:share_plus/share_plus.dart';
@@ -12,7 +13,7 @@ class ShareDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog.adaptive(
       title: const Text("Share in"),
-      content: const Text("How should the units be formated for this share?"),
+      content: const Text("How should the units be formatted for this share?"),
       actions: [
         ElevatedButton(
           onPressed: () async {
