@@ -29,9 +29,9 @@ class WeekScreen extends StatelessWidget {
             servingSize: 4,
             title: "Mac and Cheese",
             ingredients: [
-              Ingredient("eggs", Units.amount, amount: 3),
-              Ingredient("sugar", Units.g, amount: 100),
-              Ingredient("water", Units.l, amount: 0.954),
+              Ingredient(name: "eggs", unit: Units.amount, amount: 3),
+              Ingredient(name: "sugar", unit: Units.g, amount: 100),
+              Ingredient(name: "water", unit: Units.l, amount: 0.954),
             ],
             instructions: [
               "First",
@@ -83,8 +83,8 @@ class WeekScreen extends StatelessWidget {
               "Second",
               "Third",
             ],
-            prepTime: const Duration(minutes: 61),
-            cookTime: const Duration(minutes: 60),
+            prepTimeInMinutes: 61,
+            cookTimeInMinutes: 60,
             tags: [
               "cheese",
               "easy",

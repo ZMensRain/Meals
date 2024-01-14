@@ -109,8 +109,10 @@ class _MealScreenState extends State<MealScreen> {
                 " Calories per serving: ${widget.meal.caloriesPerServing} cal"
                     .replaceAll(".0 ", " "),
               ),
-              Text(" Prep time: ${formatDuration(widget.meal.prepTime)}"),
-              Text(" Cook time: ${formatDuration(widget.meal.cookTime)}"),
+              Text(
+                  " Prep time: ${formatDuration(Duration(minutes: widget.meal.prepTimeInMinutes))}"),
+              Text(
+                  " Cook time: ${formatDuration(Duration(minutes: widget.meal.cookTimeInMinutes))}"),
 
               Padding(
                 padding: const EdgeInsets.only(top: 8),

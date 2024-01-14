@@ -29,7 +29,12 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
     _formKey.currentState!.save();
     Navigator.pop(context);
     widget.onIngredientAdded(
-        Ingredient(_enteredName, _selectedUnit, amount: _enteredAmount));
+      Ingredient(
+        name: _enteredName,
+        unit: _selectedUnit,
+        amount: _enteredAmount,
+      ),
+    );
   }
 
   @override
@@ -40,8 +45,8 @@ class _NewIngredientSheetState extends State<NewIngredientSheet> {
       return;
     }
     isEditMode = true;
-    _enteredName = widget.ingredient!.name;
-    _enteredAmount = widget.ingredient!.amount;
+    _enteredName = widget.ingredient!.name!;
+    _enteredAmount = widget.ingredient!.amount!;
     _selectedUnit = widget.ingredient!.unit;
   }
 

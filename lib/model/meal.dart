@@ -6,6 +6,8 @@ import 'package:meal_planner/model/ingredient.dart';
 
 import 'package:pdf/widgets.dart' as pdf;
 
+part 'meal.g.dart';
+
 String formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
   String twoDigitMinutes = duration.inMinutes.remainder(60).abs().toString();
@@ -18,26 +20,27 @@ String formatDuration(Duration duration) {
   return "${duration.inHours}h ${twoDigitMinutes}min";
 }
 
-@collection
+@Collection()
 class Recipe {
   Recipe({
     required this.servingSize,
     required this.title,
     required this.ingredients,
     required this.instructions,
-    required this.prepTime,
-    required this.cookTime,
+    required this.prepTimeInMinutes,
+    required this.cookTimeInMinutes,
     required this.caloriesPerServing,
     this.imageUrl,
     this.tags = const [],
   });
-  final String title; //
-  final int servingSize; //
-  final double caloriesPerServing; //
+  final Id id = Isar.autoIncrement;
+  final String title;
+  final int servingSize;
+  final double caloriesPerServing;
   final List<Ingredient> ingredients;
-  final List instructions;
-  final Duration prepTime;
-  final Duration cookTime;
+  final List<String> instructions;
+  final int prepTimeInMinutes;
+  final int cookTimeInMinutes;
   final List<String> tags;
   final String? imageUrl;
 
@@ -87,11 +90,11 @@ class Recipe {
             style: const pdf.TextStyle().copyWith(fontSize: 13),
           ),
           pdf.Text(
-            " Prep time: ${formatDuration(prepTime)}",
+            " Prep time: ${formatDuration(Duration(minutes: prepTimeInMinutes))}",
             style: const pdf.TextStyle().copyWith(fontSize: 13),
           ),
           pdf.Text(
-            " Cook time: ${formatDuration(cookTime)}",
+            " Cook time: ${formatDuration(Duration(minutes: cookTimeInMinutes))}",
             style: const pdf.TextStyle().copyWith(fontSize: 13),
           ),
           pdf.SizedBox(height: 8),
@@ -130,15 +133,16 @@ class Recipe {
 }
 
 void createShoppingList(List<Recipe> meals) {
-  final List<Ingredient> allIngredients = [];
+  throw UnimplementedError();
+  // final List<Ingredient> allIngredients = [];
 
-  for (var meal in meals) {
-    allIngredients.addAll(meal.ingredients);
-  }
+  // for (var meal in meals) {
+  //   allIngredients.addAll(meal.ingredients);
+  // }
 
-  allIngredients.sort(
-    (a, b) => a.name.toLowerCase().trim().replaceAll("  ", " ").compareTo(
-          b.name.toLowerCase().trim().replaceAll("  ", " "),
-        ),
-  );
+  // allIngredients.sort(
+  //   (a, b) => a.name.toLowerCase().trim().replaceAll("  ", " ").compareTo(
+  //         b.name.toLowerCase().trim().replaceAll("  ", " "),
+  //       ),
+  // );
 }

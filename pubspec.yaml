@@ -11,18 +11,22 @@ dependencies:
   duration_picker: ^1.1.1
   flutter:
     sdk: flutter
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.2
   pdf: ^3.10.7
   printing: ^5.11.1
   share_plus: ^7.2.1
   transparent_image: ^2.0.1
-  isar: ^3.0.0
-  isar_flutter_libs: ^3.0.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
-  build_runner: any
+  isar_generator: ^3.1.0+1
+  build_runner: ^2.4.7
+
 
 flutter:
   uses-material-design: true

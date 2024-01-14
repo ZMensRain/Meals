@@ -55,7 +55,7 @@ class MealCard extends StatelessWidget {
                 bottom: 6,
               ),
               child: Text(
-                "Prep time: ${formatDuration(meal.prepTime)}",
+                "Prep time: ${formatDuration(Duration(minutes: meal.prepTimeInMinutes))}",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
@@ -65,7 +65,7 @@ class MealCard extends StatelessWidget {
                 bottom: 8,
               ),
               child: Text(
-                "Total time: ${formatDuration(meal.prepTime + meal.cookTime)}",
+                "Total time: ${formatDuration(Duration(minutes: meal.prepTimeInMinutes + meal.cookTimeInMinutes))}",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),

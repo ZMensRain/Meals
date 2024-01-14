@@ -1,18 +1,27 @@
 import 'package:converter/converter.dart';
 import 'package:isar/isar.dart';
 
-enum Units { amount, ml, l, g, kg, tsp, tbsp, cup, oz, lb }
+part 'ingredient.g.dart';
+
+enum Units { amount, ml, l, g, kg, tsp, tbsp, cup, oz, lb, none }
 
 enum MeasurementSystem { metric, imperial }
 
-@collection
+@embedded
 class Ingredient {
-  Ingredient(this.name, this.unit, {required this.amount});
-  final String name;
+  Ingredient({this.name, this.unit = Units.none, this.amount});
+  final String? name;
   @enumerated
   final Units unit;
-  final double amount;
+  final double? amount;
+
+  bool get isNull => name == null || unit == Units.none || amount == null;
+
   String format(MeasurementSystem system) {
+    if (isNull) {
+      return "null";
+    }
+
     if (unit == Units.amount) {
       return "$amount $name";
     }
@@ -20,16 +29,16 @@ class Ingredient {
     late Quantity quantity;
 
     if (unit == Units.cup) {
-      quantity = Volume(amount * 16, "tbsp");
+      quantity = Volume(amount! * 16, "tbsp");
     }
 
     if (unit == Units.g ||
         unit == Units.kg ||
         unit == Units.oz ||
         unit == Units.lb) {
-      quantity = Mass(amount, unit.name);
+      quantity = Mass(amount!, unit.name);
     } else if (unit != Units.cup) {
-      quantity = Volume(amount, unit.name);
+      quantity = Volume(amount!, unit.name);
     }
 
     switch (quantity.runtimeType) {

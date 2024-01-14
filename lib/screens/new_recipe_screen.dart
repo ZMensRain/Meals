@@ -50,8 +50,8 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
         title: _enteredTitle,
         ingredients: ingredients,
         instructions: instructions,
-        prepTime: _prepTime!,
-        cookTime: _cookTime!,
+        prepTimeInMinutes: _prepTime!.inMinutes,
+        cookTimeInMinutes: _cookTime!.inMinutes,
         caloriesPerServing: _enteredCaloriesPerServing);
   }
 
