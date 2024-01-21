@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
+import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
 
 import 'package:pdf/widgets.dart' as pdf;
@@ -130,6 +131,25 @@ class Recipe {
 
     return pdfDocument.save();
   }
+}
+
+Future<List<Recipe>> getRecipes(
+  String title,
+  List<String> includedTags,
+  List<String> notIncludedTags,
+) async {
+  var isar = await getIsar();
+
+  return isar.recipes
+      .filter()
+      .titleContains(title, caseSensitive: false)
+      .anyOf(
+        includedTags,
+        (q, element) => q.tagsElementContains(element),
+      )
+      .not()
+      .anyOf(notIncludedTags, (q, element) => q.tagsElementContains(element))
+      .findAll();
 }
 
 void createShoppingList(List<Recipe> meals) {
