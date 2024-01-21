@@ -1,5 +1,6 @@
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/meal.dart';
 
@@ -37,6 +38,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
       );
       return false;
     }
+
     return true;
   }
 
@@ -45,14 +47,20 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
       return;
     }
 
-    Recipe(
+    _formKey.currentState!.save();
+
+    Navigator.pop(context);
+    addRecipe(
+      Recipe(
         servingSize: _enteredServingNumber,
         title: _enteredTitle,
         ingredients: ingredients,
         instructions: instructions,
         prepTimeInMinutes: _prepTime!.inMinutes,
         cookTimeInMinutes: _cookTime!.inMinutes,
-        caloriesPerServing: _enteredCaloriesPerServing);
+        caloriesPerServing: _enteredCaloriesPerServing,
+      ),
+    );
   }
 
   final _formKey = GlobalKey<FormState>();
