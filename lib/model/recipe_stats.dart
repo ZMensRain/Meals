@@ -9,6 +9,7 @@ class RecipeStats {
     required this.minCalories,
     required this.maxMinutes,
     required this.minMinutes,
+    required this.tags,
   });
   final Id id = 1;
 
@@ -16,17 +17,21 @@ class RecipeStats {
   final double minCalories;
   final int maxMinutes;
   final int minMinutes;
+  final List<String> tags;
 
   RecipeStats copyWith({
     double? maxCalories,
     double? minCalories,
     int? maxMinutes,
     int? minMinutes,
+    List<String>? tags,
   }) {
     return RecipeStats(
-        maxCalories: maxCalories ?? this.maxCalories,
-        minCalories: minCalories ?? this.minCalories,
-        maxMinutes: maxMinutes ?? this.maxMinutes,
-        minMinutes: minMinutes ?? this.minMinutes);
+      maxCalories: maxCalories ?? this.maxCalories,
+      minCalories: minCalories ?? this.minCalories,
+      maxMinutes: maxMinutes ?? this.maxMinutes,
+      minMinutes: minMinutes ?? this.minMinutes,
+      tags: tags ?? this.tags,
+    );
   }
 }

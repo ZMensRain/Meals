@@ -27,6 +27,13 @@ Future<RecipeStats> getRecipeStats() async {
     var minMinutes = await caloriesQuery.cookTimeInMinutesProperty().min();
     var maxMinutes = await caloriesQuery.cookTimeInMinutesProperty().max();
 
+    var listTags = await caloriesQuery.tagsProperty().findAll();
+
+    var tags = listTags.fold<List<String>>(
+      [],
+      (previousValue, element) => previousValue + (element),
+    );
+
     if (minCalories == null || maxCalories == null) {
       minCalories = 0;
       maxCalories = 100;
@@ -37,10 +44,12 @@ Future<RecipeStats> getRecipeStats() async {
       maxMinutes = 100;
     }
     return RecipeStats(
-        maxCalories: maxCalories,
-        minCalories: minCalories,
-        maxMinutes: maxMinutes,
-        minMinutes: minMinutes);
+      maxCalories: maxCalories,
+      minCalories: minCalories,
+      maxMinutes: maxMinutes,
+      minMinutes: minMinutes,
+      tags: tags.toSet().toList(),
+    );
   }
 
   return isar.recipeStats.getSync(1)!;
