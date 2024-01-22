@@ -43,13 +43,22 @@ Future<RecipeStats> getRecipeStats() async {
       minMinutes = 0;
       maxMinutes = 100;
     }
-    return RecipeStats(
+
+    var newRecipeStats = RecipeStats(
       maxCalories: maxCalories,
       minCalories: minCalories,
       maxMinutes: maxMinutes,
       minMinutes: minMinutes,
       tags: tags.toSet().toList(),
     );
+
+    isar.writeTxn(
+      () async {
+        return isar.recipeStats.put(newRecipeStats);
+      },
+    );
+
+    return newRecipeStats;
   }
 
   return isar.recipeStats.getSync(1)!;
