@@ -133,16 +133,22 @@ class Recipe {
   }
 }
 
-Future<List<Recipe>> getRecipes(
-  String title,
-  List<String> includedTags,
-  List<String> notIncludedTags,
-) async {
+Future<List<Recipe>> getRecipes({
+  required String title,
+  required List<String> includedTags,
+  required List<String> notIncludedTags,
+  required double minCalories,
+  required double maxCalories,
+  required int minMinutes,
+  required int maxMinutes,
+}) async {
   var isar = await getIsar();
 
   return isar.recipes
       .filter()
       .titleContains(title, caseSensitive: false)
+      .caloriesPerServingBetween(minCalories, maxCalories)
+      .cookTimeInMinutesBetween(minMinutes, maxMinutes)
       .anyOf(
         includedTags,
         (q, element) => q.tagsElementContains(element),
