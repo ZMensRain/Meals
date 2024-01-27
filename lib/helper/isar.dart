@@ -18,48 +18,48 @@ void addRecipe(Recipe recipe) async {
 Future<RecipeStats> getRecipeStats() async {
   var isar = await getIsar();
 
-  if (isar.recipeStats.countSync() == 0) {
-    var caloriesQuery =
-        isar.recipes.where().idGreaterThan(0).sortByCaloriesPerServing();
-    var minCalories = await caloriesQuery.caloriesPerServingProperty().min();
-    var maxCalories = await caloriesQuery.caloriesPerServingProperty().max();
-
-    var minMinutes = await caloriesQuery.cookTimeInMinutesProperty().min();
-    var maxMinutes = await caloriesQuery.cookTimeInMinutesProperty().max();
-
-    var listTags = await caloriesQuery.tagsProperty().findAll();
-
-    var tags = listTags.fold<List<String>>(
-      [],
-      (previousValue, element) => previousValue + (element),
-    );
-
-    if (minCalories == null || maxCalories == null) {
-      minCalories = 0;
-      maxCalories = 100;
-    }
-
-    if (minMinutes == null || maxMinutes == null) {
-      minMinutes = 0;
-      maxMinutes = 100;
-    }
-
-    var newRecipeStats = RecipeStats(
-      maxCalories: maxCalories,
-      minCalories: minCalories,
-      maxMinutes: maxMinutes,
-      minMinutes: minMinutes,
-      tags: tags.toSet().toList(),
-    );
-
-    isar.writeTxn(
-      () async {
-        return isar.recipeStats.put(newRecipeStats);
-      },
-    );
-
-    return newRecipeStats;
+  if (isar.recipeStats.countSync() != 0) {
+    return isar.recipeStats.getSync(1)!;
   }
 
-  return isar.recipeStats.getSync(1)!;
+  var caloriesQuery =
+      isar.recipes.where().idGreaterThan(0).sortByCaloriesPerServing();
+  var minCalories = await caloriesQuery.caloriesPerServingProperty().min();
+  var maxCalories = await caloriesQuery.caloriesPerServingProperty().max();
+
+  var minMinutes = await caloriesQuery.cookTimeInMinutesProperty().min();
+  var maxMinutes = await caloriesQuery.cookTimeInMinutesProperty().max();
+
+  var listTags = await caloriesQuery.tagsProperty().findAll();
+
+  var tags = listTags.fold<List<String>>(
+    [],
+    (previousValue, element) => previousValue + (element),
+  );
+
+  if (minCalories == null || maxCalories == null) {
+    minCalories = 0;
+    maxCalories = 100;
+  }
+
+  if (minMinutes == null || maxMinutes == null) {
+    minMinutes = 0;
+    maxMinutes = 100;
+  }
+
+  var newRecipeStats = RecipeStats(
+    maxCalories: maxCalories,
+    minCalories: minCalories,
+    maxMinutes: maxMinutes,
+    minMinutes: minMinutes,
+    tags: tags.toSet().toList(),
+  );
+
+  isar.writeTxn(
+    () async {
+      return isar.recipeStats.put(newRecipeStats);
+    },
+  );
+
+  return newRecipeStats;
 }
