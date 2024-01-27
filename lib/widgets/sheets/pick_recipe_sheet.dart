@@ -1,47 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:isar/isar.dart';
-import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/meal.dart';
 import 'package:meal_planner/widgets/filter_widget.dart';
 import 'package:meal_planner/widgets/recipe_card.dart';
 
 class PickRecipeSheet extends StatefulWidget {
-  const PickRecipeSheet({super.key});
+  const PickRecipeSheet({super.key, required this.onPickRecipe});
+
+  final void Function(Id id) onPickRecipe;
 
   @override
   State<PickRecipeSheet> createState() => _PickRecipeSheetState();
 }
 
 class _PickRecipeSheetState extends State<PickRecipeSheet> {
-  bool isSearching = false;
-  bool isFiltering = false;
-
-  final searchController = TextEditingController();
-
-  void recipePicked(Id recipeId) {}
-
-  late Isar isar;
-
-  @override
-  void initState() {
-    super.initState();
-    getIsar().then((value) => isar = value);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    searchController.dispose();
-  }
-
   List<Recipe> recipes = [];
+
+  double minCalories = 0;
+
+  double maxCalories = 300;
+
+  int minMinutes = 0;
+
+  int maxMinutes = 180;
+
+  String title = '';
+  List<String> includedTags = [];
+  List<String> excludedTags = [];
 
   @override
   Widget build(BuildContext context) {
     final bottom = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 16, 16, bottom),
+      padding: EdgeInsets.fromLTRB(14, 14, 14, bottom),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -49,40 +41,43 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
             "Pick a recipe",
             style: Theme.of(context).textTheme.headlineMedium,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              IconButton(
-                  onPressed: () => setState(
-                        () => isSearching = !isSearching,
-                      ),
-                  icon: const Icon(Icons.search)),
-              const Spacer(),
-              IconButton(
-                onPressed: () => setState(() {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  isSearching = false;
-                  isFiltering = !isFiltering;
-                }),
-                icon: const Icon(Icons.sort),
-              ),
-            ],
+          FilterWidget(
+            onFilterChanged: (
+              maxCalories,
+              minCalories,
+              maxMinutes,
+              minMinutes,
+              includedTags,
+              excludedTags,
+              searchBarText,
+            ) {
+              setState(
+                () {
+                  this.minCalories = minCalories;
+
+                  this.maxCalories = maxCalories;
+
+                  this.minMinutes = minMinutes;
+
+                  this.maxMinutes = maxMinutes;
+
+                  title = searchBarText;
+                  this.includedTags = includedTags;
+                  this.excludedTags = excludedTags;
+                },
+              );
+            },
           ),
-          if (isSearching)
-            TextField(
-              decoration: const InputDecoration(hintText: "Recipe name"),
-              autofocus: true,
-              controller: searchController,
-              onSubmitted: (value) {
-                setState(() {
-                  isSearching = false;
-                });
-              },
-            ),
-          if (isFiltering) const FilterWidget(),
-          if (!isSearching) const Divider(),
           FutureBuilder(
-            future: getRecipes(searchController.text, [], []),
+            future: getRecipes(
+              title: title,
+              includedTags: includedTags,
+              notIncludedTags: excludedTags,
+              minCalories: minCalories,
+              maxCalories: maxCalories,
+              minMinutes: minMinutes,
+              maxMinutes: maxMinutes,
+            ),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Expanded(
@@ -110,7 +105,7 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
                         TextButton(
                             onPressed: () {
                               setState(() {
-                                searchController.text = "";
+                                // TODO clear button
                               });
                             },
                             child: const Text("clear search"))
@@ -124,7 +119,8 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) => MealCard(
                       snapshot.data![index],
-                      onTaped: () => recipePicked(snapshot.data![index].id),
+                      onTaped: () =>
+                          widget.onPickRecipe(snapshot.data![index].id),
                     ),
                   ),
                 );
