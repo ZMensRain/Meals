@@ -12,7 +12,9 @@ class WeekdayScreen extends StatelessWidget {
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
-      builder: (context) => const PickRecipeSheet(),
+      builder: (context) => PickRecipeSheet(
+        onPickRecipe: (int id) {},
+      ),
     );
   }
 
