@@ -34,7 +34,7 @@ class Recipe {
     this.imageUrl,
     this.tags = const [],
   });
-  final Id id = Isar.autoIncrement;
+  Id id = Isar.autoIncrement;
   final String title;
   final int servingSize;
   final double caloriesPerServing;
@@ -130,6 +130,31 @@ class Recipe {
     );
 
     return pdfDocument.save();
+  }
+
+  Recipe copyWith({
+    String? title,
+    int? servingSize,
+    double? caloriesPerServing,
+    List<Ingredient>? ingredients,
+    List<String>? instructions,
+    int? prepTimeInMinutes,
+    int? cookTimeInMinutes,
+    List<String>? tags,
+  }) {
+    var r = Recipe(
+      caloriesPerServing: caloriesPerServing ?? this.caloriesPerServing,
+      cookTimeInMinutes: cookTimeInMinutes ?? this.cookTimeInMinutes,
+      ingredients: ingredients ?? this.ingredients,
+      instructions: instructions ?? this.instructions,
+      prepTimeInMinutes: prepTimeInMinutes ?? this.prepTimeInMinutes,
+      servingSize: servingSize ?? this.servingSize,
+      title: title ?? this.title,
+      imageUrl: imageUrl ?? imageUrl,
+      tags: tags ?? this.tags,
+    );
+    r.id = id;
+    return r;
   }
 }
 

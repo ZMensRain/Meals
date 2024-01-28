@@ -161,6 +161,7 @@ Recipe _recipeDeserialize(
     tags: reader.readStringList(offsets[7]) ?? const [],
     title: reader.readString(offsets[8]),
   );
+  object.id = id;
   return object;
 }
 
@@ -208,7 +209,9 @@ List<IsarLinkBase<dynamic>> _recipeGetLinks(Recipe object) {
   return [];
 }
 
-void _recipeAttach(IsarCollection<dynamic> col, Id id, Recipe object) {}
+void _recipeAttach(IsarCollection<dynamic> col, Id id, Recipe object) {
+  object.id = id;
+}
 
 extension RecipeQueryWhereSort on QueryBuilder<Recipe, Recipe, QWhere> {
   QueryBuilder<Recipe, Recipe, QAfterWhere> anyId() {
