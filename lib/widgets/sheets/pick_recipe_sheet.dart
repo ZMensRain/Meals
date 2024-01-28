@@ -30,10 +30,8 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bottom = MediaQuery.of(context).viewInsets.bottom;
-
     return Padding(
-      padding: EdgeInsets.fromLTRB(14, 14, 14, bottom),
+      padding: const EdgeInsets.fromLTRB(14, 14, 14, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
