@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:meal_planner/helper/isar.dart';
 
-class PickTagMenu extends StatefulWidget {
-  const PickTagMenu({super.key, required this.excludeTags});
+class PickTagSheet extends StatefulWidget {
+  const PickTagSheet({super.key, required this.excludeTags});
   final List<String> excludeTags;
   @override
-  State<PickTagMenu> createState() => _PickTagMenuState();
+  State<PickTagSheet> createState() => _PickTagSheetState();
 }
 
-class _PickTagMenuState extends State<PickTagMenu> {
+class _PickTagSheetState extends State<PickTagSheet> {
   List<String> tags = [];
 
   var searchController = TextEditingController();
