@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/recipe_stats.dart';
+import 'package:meal_planner/widgets/sheets/pick_tag_sheet.dart';
 
 class FilterWidget extends StatefulWidget {
   const FilterWidget({super.key, required this.onFilterChanged});
@@ -155,77 +156,91 @@ class _FilterWidgetState extends State<FilterWidget> {
                 update();
               },
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Expanded(
-                child: Row(
-                  children: [
-                    Text(
-                      "Included tags",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const Spacer(),
-                    IconButton(
-                        onPressed: () async {
-                          var tag = await showModalBottomSheet<String>(
-                            context: context,
-                            builder: (context) => const Placeholder(),
-                          );
-                          if (tag == null) {
-                            return;
-                          }
-                          setState(
-                            () => includedTags.add(tag),
-                          );
-                          update();
-                        },
-                        icon: const Icon(Icons.add))
-                  ],
-                ),
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Included tags",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Spacer(),
+                  IconButton(
+                      onPressed: () async {
+                        var tag = await showModalBottomSheet<String>(
+                          context: context,
+                          builder: (context) => PickTagSheet(
+                              excludeTags: includedTags + excludedTags),
+                        );
+                        if (tag == null) {
+                          return;
+                        }
+                        setState(
+                          () => includedTags.add(tag),
+                        );
+                        update();
+                      },
+                      icon: const Icon(Icons.add))
+                ],
               ),
             ),
             Expanded(
               child: ListView.builder(
                 itemCount: includedTags.length,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => Text(includedTags[index]),
+                itemBuilder: (context, index) => TextButton(
+                  onPressed: () {
+                    setState(
+                      () {
+                        includedTags.removeAt(index);
+                      },
+                    );
+                  },
+                  child: Text(includedTags[index]),
+                ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Expanded(
-                child: Row(
-                  children: [
-                    Text(
-                      "Excluded tags",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    const Spacer(),
-                    IconButton(
-                      onPressed: () async {
-                        var tag = await showModalBottomSheet<String>(
-                          context: context,
-                          builder: (context) => const Placeholder(),
-                        );
-                        if (tag == null) {
-                          return;
-                        }
-                        setState(
-                          () => excludedTags.add(tag),
-                        );
-                        update();
-                      },
-                      icon: const Icon(Icons.add),
-                    ),
-                  ],
-                ),
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Excluded tags",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  const Spacer(),
+                  IconButton(
+                    onPressed: () async {
+                      var tag = await showModalBottomSheet<String>(
+                        context: context,
+                        builder: (context) => PickTagSheet(
+                            excludeTags: includedTags + excludedTags),
+                      );
+                      if (tag == null) {
+                        return;
+                      }
+                      setState(
+                        () => excludedTags.add(tag),
+                      );
+                      update();
+                    },
+                    icon: const Icon(Icons.add),
+                  ),
+                ],
               ),
             ),
             Expanded(
               child: ListView.builder(
                 itemCount: excludedTags.length,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => Text(excludedTags[index]),
+                itemBuilder: (context, index) => TextButton(
+                  onPressed: () {
+                    setState(
+                      () => excludedTags.removeAt(index),
+                    );
+                  },
+                  child: Text(
+                    excludedTags[index],
+                  ),
+                ),
               ),
             ),
           ]
