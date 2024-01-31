@@ -5,7 +5,11 @@ import 'package:meal_planner/model/recipe_stats.dart';
 import 'package:meal_planner/widgets/sheets/pick_tag_sheet.dart';
 
 class FilterWidget extends StatefulWidget {
-  const FilterWidget({super.key, required this.onFilterChanged});
+  const FilterWidget(
+      {super.key,
+      required this.onFilterChanged,
+      this.showPlusButton = false,
+      this.onPlusButton});
 
   final void Function(
     double maxCalories,
@@ -16,6 +20,10 @@ class FilterWidget extends StatefulWidget {
     List<String> excludedTags,
     String searchBarText,
   ) onFilterChanged;
+
+  final void Function()? onPlusButton;
+
+  final bool showPlusButton;
 
   @override
   State<FilterWidget> createState() => _FilterWidgetState();
@@ -102,6 +110,11 @@ class _FilterWidgetState extends State<FilterWidget> {
                 }),
                 icon: const Icon(Icons.sort),
               ),
+              if (widget.showPlusButton)
+                IconButton(
+                  onPressed: widget.onPlusButton,
+                  icon: const Icon(Icons.add),
+                ),
             ],
           ),
           const SizedBox(height: 8),
