@@ -1,4 +1,7 @@
 import 'package:isar/isar.dart';
+import 'package:meal_planner/helper/isar.dart';
+import 'package:meal_planner/model/ingredient.dart';
+import 'package:meal_planner/model/meal.dart';
 
 part 'week.g.dart';
 
@@ -23,7 +26,7 @@ class Week {
     this.saturday = const [],
     this.sunday = const [],
   });
-  final Id id = Isar.autoIncrement;
+  final Id id = 1;
 
   final List<Id> monday;
   final List<Id> tuesday;
@@ -52,5 +55,73 @@ class Week {
       default:
         return [];
     }
+  }
+
+  Future<List<Ingredient>> getIngredients() async {
+    var f = Weekday.values.map((e) => getRecipeIds(e)).toList();
+    List<Id> ids =
+        f.fold([], (previousValue, element) => previousValue + element);
+
+    List<Recipe?> recipes = (await getIsar()).recipes.getAllSync(ids);
+
+    List<Ingredient> ingredients = recipes
+        .map(
+      (e) => e?.ingredients,
+    )
+        .fold(
+      [],
+      (previousValue, element) {
+        if (element == null) {
+          return previousValue;
+        }
+        return previousValue + element;
+      },
+    );
+
+    ingredients.sort(
+      (a, b) => a.name!.toLowerCase().compareTo(b.name!.toLowerCase()),
+    );
+
+    List<Ingredient> finalIngredients = [];
+
+    for (var ingredient in ingredients) {
+      bool exists = false;
+
+      // checks if the ingredient is all ready in the finalIngredients list.
+      // If it is adds the ingredient to the the saved one.
+      for (var i = 0; i < finalIngredients.length; i++) {
+        if (ingredient.isSameAs(finalIngredients[i])) {
+          finalIngredients[i] = ingredient.add(finalIngredients[i]);
+          exists = true;
+          break;
+        }
+      }
+
+      if (!exists) {
+        finalIngredients.add(ingredient);
+      }
+    }
+
+    return finalIngredients;
+  }
+
+  Week copyWith({
+    List<Id>? monday,
+    List<Id>? tuesday,
+    List<Id>? wednesday,
+    List<Id>? thursday,
+    List<Id>? friday,
+    List<Id>? saturday,
+    List<Id>? sunday,
+  }) {
+    return Week(
+      monday: monday ?? this.monday,
+      tuesday: tuesday ?? this.tuesday,
+      wednesday: wednesday ?? this.wednesday,
+      thursday: thursday ?? this.thursday,
+      friday: friday ?? this.friday,
+      saturday: saturday ?? this.saturday,
+      sunday: sunday ?? this.sunday,
+    );
   }
 }
