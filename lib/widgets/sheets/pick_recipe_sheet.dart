@@ -92,21 +92,14 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
               }
               if (snapshot.hasData) {
                 if (snapshot.data!.isEmpty) {
-                  return Expanded(
+                  return const Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
-                          "Sorry we couldn't find anything \n try different tags or a different search",
+                        Text(
+                          "Sorry we couldn't find anything...",
                           textAlign: TextAlign.center,
                         ),
-                        TextButton(
-                            onPressed: () {
-                              setState(() {
-                                // TODO clear button
-                              });
-                            },
-                            child: const Text("clear search"))
                       ],
                     ),
                   );
@@ -117,8 +110,10 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
                     itemCount: snapshot.data!.length,
                     itemBuilder: (context, index) => MealCard(
                       snapshot.data![index],
-                      onTaped: () =>
-                          widget.onPickRecipe(snapshot.data![index].id),
+                      onTaped: () {
+                        Navigator.pop(context);
+                        widget.onPickRecipe(snapshot.data![index].id);
+                      },
                     ),
                   ),
                 );
