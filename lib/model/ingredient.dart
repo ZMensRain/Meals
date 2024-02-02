@@ -80,4 +80,57 @@ class Ingredient {
     }
     return "$amount$unit $name";
   }
+
+  bool isSameAs(Ingredient ingredient) {
+    if (ingredient.name!
+            .toLowerCase()
+            .replaceAll(" ", "")
+            .replaceAll("\n", "") ==
+        name!.toLowerCase().replaceAll(" ", "").replaceAll("\n", "")) {
+      return true;
+    }
+    return false;
+  }
+
+  Ingredient add(Ingredient ingredient) {
+    if (!isSameAs(ingredient)) {
+      throw "Two different ingredients";
+    }
+
+    late Quantity quantity;
+
+    if (("ml l tsp tbsp cup".contains(ingredient.unit.name) &&
+            !"ml l tsp tbsp cup".contains(unit.name)) ||
+        ingredient.unit != unit) {
+      throw "Units are not of the same type";
+    }
+
+    if (ingredient.unit == Units.amount) {
+      return Ingredient(
+        name: name,
+        amount: amount! + ingredient.amount!,
+        unit: Units.amount,
+      );
+    }
+
+    if ("ml l tsp tbsp cup".contains(ingredient.unit.name)) {
+      quantity = Volume(ingredient.amount!, ingredient.unit.name) +
+          Volume(amount!, unit.name);
+    } else {
+      quantity = Mass(
+            ingredient.amount!,
+            ingredient.unit.name,
+          ) +
+          Mass(
+            amount!,
+            unit.name,
+          );
+    }
+
+    return Ingredient(
+      amount: quantity.valueIn(unit.name) as double,
+      name: name,
+      unit: unit,
+    );
+  }
 }
