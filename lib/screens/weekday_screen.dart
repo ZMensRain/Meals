@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/helper/isar.dart';
+import 'package:meal_planner/model/week.dart';
+import 'package:meal_planner/screens/week_screen.dart';
 import 'package:meal_planner/widgets/recipe_card.dart';
 import 'package:meal_planner/widgets/sheets/pick_recipe_sheet.dart';
 
 class WeekdayScreen extends StatelessWidget {
-  const WeekdayScreen({super.key, required this.recipes});
-  final List<Recipe> recipes;
-
+  const WeekdayScreen({super.key, required this.weekday});
+  final Weekday weekday;
   void addRecipeToDay(BuildContext context) {
     showModalBottomSheet(
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (context) => PickRecipeSheet(
-        onPickRecipe: (int id) {},
+        onPickRecipe: (int id) {
+          addRecipeToWeekday(id, weekday);
+        },
       ),
     );
   }
@@ -26,6 +29,7 @@ class WeekdayScreen extends StatelessWidget {
         child: const Icon(Icons.add),
       ),
       appBar: AppBar(
+        title: Text(weekday.name.capitalize()),
         actions: [
           IconButton(
             onPressed: () => addRecipeToDay(context),
@@ -33,12 +37,29 @@ class WeekdayScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: recipes.length,
-        itemBuilder: (context, index) => MealCard(
-          recipes[index],
-          onTaped: () {},
-        ),
+      body: FutureBuilder(
+        future: getRecipesForWeekday(weekday),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text("Nothing here yet..."),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) => MealCard(
+              snapshot.data![index],
+              onTaped: () {},
+            ),
+          );
+        },
       ),
     );
   }
