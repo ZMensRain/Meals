@@ -19,6 +19,7 @@ dependencies:
   printing: ^5.11.1
   share_plus: ^7.2.1
   transparent_image: ^2.0.1
+  path:
 
 
 dev_dependencies:

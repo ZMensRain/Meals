@@ -9,6 +9,9 @@ import 'package:meal_planner/widgets/image_picker.dart';
 
 import 'package:meal_planner/widgets/sections/ingredient_section.dart';
 import 'package:meal_planner/widgets/sections/instruction_section.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'package:path/path.dart' as p;
 
 class NewRecipeScreen extends StatefulWidget {
   const NewRecipeScreen({super.key});
@@ -53,7 +56,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     return true;
   }
 
-  void _createRecipe() {
+  void _createRecipe() async {
     if (!_isRecipeValid()) {
       return;
     }
@@ -61,16 +64,22 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     _formKey.currentState!.save();
 
     Navigator.pop(context);
+
+    var dirPath = await getApplicationDocumentsDirectory();
+
+    image!.copy(dirPath.path + p.basename(image!.path));
+
     addRecipe(
       Recipe(
-          servingSize: _enteredServingNumber,
-          title: _enteredTitle,
-          ingredients: ingredients,
-          instructions: instructions,
-          prepTimeInMinutes: _prepTime!.inMinutes,
-          cookTimeInMinutes: _cookTime!.inMinutes,
-          caloriesPerServing: _enteredCaloriesPerServing,
-          imagePath: "TODO"),
+        servingSize: _enteredServingNumber,
+        title: _enteredTitle,
+        ingredients: ingredients,
+        instructions: instructions,
+        prepTimeInMinutes: _prepTime!.inMinutes,
+        cookTimeInMinutes: _cookTime!.inMinutes,
+        caloriesPerServing: _enteredCaloriesPerServing,
+        imagePath: dirPath.path + p.basename(image!.path),
+      ),
     );
   }
 
