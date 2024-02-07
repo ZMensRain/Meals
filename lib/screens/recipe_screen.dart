@@ -37,22 +37,21 @@ class _MealScreenState extends State<MealScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              if (widget.meal.imageUrl != null)
-                Hero(
-                  tag: widget.meal.imageUrl!,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    clipBehavior: Clip.hardEdge,
-                    child: Image(
-                      image: NetworkImage(widget.meal.imageUrl!),
-                      height: 200,
-                      fit: BoxFit.cover,
-                    ),
+              Hero(
+                tag: widget.meal.id,
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  clipBehavior: Clip.hardEdge,
+                  child: Image(
+                    image: NetworkImage(widget.meal.imagePath),
+                    height: 200,
+                    fit: BoxFit.cover,
                   ),
                 ),
+              ),
               SizedBox(
                 height: 50,
                 child: ListView.builder(

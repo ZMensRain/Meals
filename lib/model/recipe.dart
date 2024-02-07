@@ -31,7 +31,7 @@ class Recipe {
     required this.prepTimeInMinutes,
     required this.cookTimeInMinutes,
     required this.caloriesPerServing,
-    required this.imageUrl,
+    required this.imagePath,
     this.tags = const [],
   });
   Id id = Isar.autoIncrement;
@@ -43,7 +43,7 @@ class Recipe {
   final int prepTimeInMinutes;
   final int cookTimeInMinutes;
   final List<String> tags;
-  final String imageUrl;
+  final String imagePath;
 
   List<String> formatIngredients(MeasurementSystem system) {
     final List<String> output = [];
@@ -141,7 +141,7 @@ class Recipe {
     int? prepTimeInMinutes,
     int? cookTimeInMinutes,
     List<String>? tags,
-    String? imageFilePath,
+    String? imagePath,
   }) {
     var r = Recipe(
       caloriesPerServing: caloriesPerServing ?? this.caloriesPerServing,
@@ -151,7 +151,7 @@ class Recipe {
       prepTimeInMinutes: prepTimeInMinutes ?? this.prepTimeInMinutes,
       servingSize: servingSize ?? this.servingSize,
       title: title ?? this.title,
-      imageUrl: imageFilePath ?? imageUrl,
+      imagePath: imagePath ?? this.imagePath,
       tags: tags ?? this.tags,
     );
     r.id = id;

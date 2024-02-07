@@ -17,22 +17,21 @@ class RecipeCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (meal.imageUrl != null)
-              Hero(
-                tag: meal.imageUrl!,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: FadeInImage(
-                    placeholder: MemoryImage(kTransparentImage),
-                    image: NetworkImage(meal.imageUrl!),
-                    height: 200,
-                    fit: BoxFit.cover,
-                  ),
+            Hero(
+              tag: meal.id,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: FadeInImage(
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: NetworkImage(meal.imagePath),
+                  height: 200,
+                  fit: BoxFit.cover,
                 ),
               ),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8),
               child: Text(

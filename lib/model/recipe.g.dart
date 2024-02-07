@@ -27,9 +27,9 @@ const RecipeSchema = CollectionSchema(
       name: r'cookTimeInMinutes',
       type: IsarType.long,
     ),
-    r'imageUrl': PropertySchema(
+    r'imagePath': PropertySchema(
       id: 2,
-      name: r'imageUrl',
+      name: r'imagePath',
       type: IsarType.string,
     ),
     r'ingredients': PropertySchema(
@@ -84,7 +84,7 @@ int _recipeEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  bytesCount += 3 + object.imageUrl.length * 3;
+  bytesCount += 3 + object.imagePath.length * 3;
   bytesCount += 3 + object.ingredients.length * 3;
   {
     final offsets = allOffsets[Ingredient]!;
@@ -119,7 +119,7 @@ void _recipeSerialize(
 ) {
   writer.writeDouble(offsets[0], object.caloriesPerServing);
   writer.writeLong(offsets[1], object.cookTimeInMinutes);
-  writer.writeString(offsets[2], object.imageUrl);
+  writer.writeString(offsets[2], object.imagePath);
   writer.writeObjectList<Ingredient>(
     offsets[3],
     allOffsets,
@@ -142,7 +142,7 @@ Recipe _recipeDeserialize(
   final object = Recipe(
     caloriesPerServing: reader.readDouble(offsets[0]),
     cookTimeInMinutes: reader.readLong(offsets[1]),
-    imageUrl: reader.readString(offsets[2]),
+    imagePath: reader.readString(offsets[2]),
     ingredients: reader.readObjectList<Ingredient>(
           offsets[3],
           IngredientSchema.deserialize,
@@ -454,20 +454,20 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlEqualTo(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imageUrl',
+        property: r'imagePath',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlGreaterThan(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -475,14 +475,14 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
-        property: r'imageUrl',
+        property: r'imagePath',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlLessThan(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -490,14 +490,14 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
-        property: r'imageUrl',
+        property: r'imagePath',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlBetween(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -506,7 +506,7 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'imageUrl',
+        property: r'imagePath',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -516,69 +516,69 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlStartsWith(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'imageUrl',
+        property: r'imagePath',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlEndsWith(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'imageUrl',
+        property: r'imagePath',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlContains(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathContains(
       String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
-        property: r'imageUrl',
+        property: r'imagePath',
         value: value,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlMatches(
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathMatches(
       String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
-        property: r'imageUrl',
+        property: r'imagePath',
         wildcard: pattern,
         caseSensitive: caseSensitive,
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlIsEmpty() {
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'imageUrl',
+        property: r'imagePath',
         value: '',
       ));
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlIsNotEmpty() {
+  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imagePathIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'imageUrl',
+        property: r'imagePath',
         value: '',
       ));
     });
@@ -1379,15 +1379,15 @@ extension RecipeQuerySortBy on QueryBuilder<Recipe, Recipe, QSortBy> {
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterSortBy> sortByImageUrl() {
+  QueryBuilder<Recipe, Recipe, QAfterSortBy> sortByImagePath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imageUrl', Sort.asc);
+      return query.addSortBy(r'imagePath', Sort.asc);
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterSortBy> sortByImageUrlDesc() {
+  QueryBuilder<Recipe, Recipe, QAfterSortBy> sortByImagePathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imageUrl', Sort.desc);
+      return query.addSortBy(r'imagePath', Sort.desc);
     });
   }
 
@@ -1465,15 +1465,15 @@ extension RecipeQuerySortThenBy on QueryBuilder<Recipe, Recipe, QSortThenBy> {
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterSortBy> thenByImageUrl() {
+  QueryBuilder<Recipe, Recipe, QAfterSortBy> thenByImagePath() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imageUrl', Sort.asc);
+      return query.addSortBy(r'imagePath', Sort.asc);
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterSortBy> thenByImageUrlDesc() {
+  QueryBuilder<Recipe, Recipe, QAfterSortBy> thenByImagePathDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'imageUrl', Sort.desc);
+      return query.addSortBy(r'imagePath', Sort.desc);
     });
   }
 
@@ -1527,10 +1527,10 @@ extension RecipeQueryWhereDistinct on QueryBuilder<Recipe, Recipe, QDistinct> {
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QDistinct> distinctByImageUrl(
+  QueryBuilder<Recipe, Recipe, QDistinct> distinctByImagePath(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'imageUrl', caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'imagePath', caseSensitive: caseSensitive);
     });
   }
 
@@ -1585,9 +1585,9 @@ extension RecipeQueryProperty on QueryBuilder<Recipe, Recipe, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Recipe, String, QQueryOperations> imageUrlProperty() {
+  QueryBuilder<Recipe, String, QQueryOperations> imagePathProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'imageUrl');
+      return query.addPropertyName(r'imagePath');
     });
   }
 

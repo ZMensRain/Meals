@@ -59,7 +59,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
           prepTimeInMinutes: _prepTime!.inMinutes,
           cookTimeInMinutes: _cookTime!.inMinutes,
           caloriesPerServing: _enteredCaloriesPerServing,
-          imageUrl: "TODO"),
+          imagePath: "TODO"),
     );
   }
 
