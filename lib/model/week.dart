@@ -1,7 +1,7 @@
 import 'package:isar/isar.dart';
 import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/recipe.dart';
 
 part 'week.g.dart';
 

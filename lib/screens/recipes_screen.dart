@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meal_planner/helper/isar.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/model/recipe_stats.dart';
 import 'package:meal_planner/screens/recipe_screen.dart';
 import 'package:meal_planner/screens/new_recipe_screen.dart';

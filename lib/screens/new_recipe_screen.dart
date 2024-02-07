@@ -2,7 +2,7 @@ import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/recipe.dart';
 
 import 'package:meal_planner/widgets/sections/ingredient_section.dart';
 import 'package:meal_planner/widgets/sections/instruction_section.dart';
@@ -52,14 +52,14 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
     Navigator.pop(context);
     addRecipe(
       Recipe(
-        servingSize: _enteredServingNumber,
-        title: _enteredTitle,
-        ingredients: ingredients,
-        instructions: instructions,
-        prepTimeInMinutes: _prepTime!.inMinutes,
-        cookTimeInMinutes: _cookTime!.inMinutes,
-        caloriesPerServing: _enteredCaloriesPerServing,
-      ),
+          servingSize: _enteredServingNumber,
+          title: _enteredTitle,
+          ingredients: ingredients,
+          instructions: instructions,
+          prepTimeInMinutes: _prepTime!.inMinutes,
+          cookTimeInMinutes: _cookTime!.inMinutes,
+          caloriesPerServing: _enteredCaloriesPerServing,
+          imageUrl: "TODO"),
     );
   }
 

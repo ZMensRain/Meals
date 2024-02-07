@@ -1,5 +1,5 @@
 import 'package:isar/isar.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/model/recipe_stats.dart';
 import 'package:meal_planner/model/week.dart';
 import 'package:path_provider/path_provider.dart';

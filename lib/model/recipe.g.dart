@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'meal.dart';
+part of 'recipe.dart';
 
 // **************************************************************************
 // IsarCollectionGenerator
@@ -84,12 +84,7 @@ int _recipeEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
-  {
-    final value = object.imageUrl;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
+  bytesCount += 3 + object.imageUrl.length * 3;
   bytesCount += 3 + object.ingredients.length * 3;
   {
     final offsets = allOffsets[Ingredient]!;
@@ -147,7 +142,7 @@ Recipe _recipeDeserialize(
   final object = Recipe(
     caloriesPerServing: reader.readDouble(offsets[0]),
     cookTimeInMinutes: reader.readLong(offsets[1]),
-    imageUrl: reader.readStringOrNull(offsets[2]),
+    imageUrl: reader.readString(offsets[2]),
     ingredients: reader.readObjectList<Ingredient>(
           offsets[3],
           IngredientSchema.deserialize,
@@ -177,7 +172,7 @@ P _recipeDeserializeProp<P>(
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 3:
       return (reader.readObjectList<Ingredient>(
             offset,
@@ -459,24 +454,8 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
     });
   }
 
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'imageUrl',
-      ));
-    });
-  }
-
-  QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'imageUrl',
-      ));
-    });
-  }
-
   QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlEqualTo(
-    String? value, {
+    String value, {
     bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
@@ -489,7 +468,7 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
   }
 
   QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlGreaterThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -504,7 +483,7 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
   }
 
   QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlLessThan(
-    String? value, {
+    String value, {
     bool include = false,
     bool caseSensitive = true,
   }) {
@@ -519,8 +498,8 @@ extension RecipeQueryFilter on QueryBuilder<Recipe, Recipe, QFilterCondition> {
   }
 
   QueryBuilder<Recipe, Recipe, QAfterFilterCondition> imageUrlBetween(
-    String? lower,
-    String? upper, {
+    String lower,
+    String upper, {
     bool includeLower = true,
     bool includeUpper = true,
     bool caseSensitive = true,
@@ -1606,7 +1585,7 @@ extension RecipeQueryProperty on QueryBuilder<Recipe, Recipe, QQueryProperty> {
     });
   }
 
-  QueryBuilder<Recipe, String?, QQueryOperations> imageUrlProperty() {
+  QueryBuilder<Recipe, String, QQueryOperations> imageUrlProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'imageUrl');
     });

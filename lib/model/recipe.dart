@@ -7,7 +7,7 @@ import 'package:meal_planner/model/ingredient.dart';
 
 import 'package:pdf/widgets.dart' as pdf;
 
-part 'meal.g.dart';
+part 'recipe.g.dart';
 
 String formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
@@ -31,7 +31,7 @@ class Recipe {
     required this.prepTimeInMinutes,
     required this.cookTimeInMinutes,
     required this.caloriesPerServing,
-    this.imageUrl,
+    required this.imageUrl,
     this.tags = const [],
   });
   Id id = Isar.autoIncrement;
@@ -43,7 +43,7 @@ class Recipe {
   final int prepTimeInMinutes;
   final int cookTimeInMinutes;
   final List<String> tags;
-  final String? imageUrl;
+  final String imageUrl;
 
   List<String> formatIngredients(MeasurementSystem system) {
     final List<String> output = [];
@@ -141,6 +141,7 @@ class Recipe {
     int? prepTimeInMinutes,
     int? cookTimeInMinutes,
     List<String>? tags,
+    String? imageFilePath,
   }) {
     var r = Recipe(
       caloriesPerServing: caloriesPerServing ?? this.caloriesPerServing,
@@ -150,7 +151,7 @@ class Recipe {
       prepTimeInMinutes: prepTimeInMinutes ?? this.prepTimeInMinutes,
       servingSize: servingSize ?? this.servingSize,
       title: title ?? this.title,
-      imageUrl: imageUrl ?? imageUrl,
+      imageUrl: imageFilePath ?? imageUrl,
       tags: tags ?? this.tags,
     );
     r.id = id;

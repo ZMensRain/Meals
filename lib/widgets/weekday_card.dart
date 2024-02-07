@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/recipe.dart';
 
 class WeekdayCard extends StatelessWidget {
   const WeekdayCard(this.day, this.recipes,

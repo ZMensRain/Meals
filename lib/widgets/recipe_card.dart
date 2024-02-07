@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meal_planner/model/meal.dart';
+import 'package:meal_planner/model/recipe.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class RecipeCard extends StatelessWidget {
