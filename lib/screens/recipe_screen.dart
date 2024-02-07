@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/widgets/share_dialog.dart';
 
 class MealScreen extends StatefulWidget {
-  const MealScreen(this.meal, {super.key});
-  final Recipe meal;
+  const MealScreen(this.recipe, {super.key});
+  final Recipe recipe;
 
   @override
   State<MealScreen> createState() => _MealScreenState();
@@ -18,13 +20,13 @@ class _MealScreenState extends State<MealScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.meal.title),
+        title: Text(widget.recipe.title),
         actions: [
           IconButton(
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (context) => ShareDialog(widget.meal),
+                builder: (context) => ShareDialog(widget.recipe),
               );
             },
             icon: const Icon(Icons.share),
@@ -38,7 +40,7 @@ class _MealScreenState extends State<MealScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Hero(
-                tag: widget.meal.id,
+                tag: widget.recipe.id,
                 child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
@@ -46,7 +48,7 @@ class _MealScreenState extends State<MealScreen> {
                   ),
                   clipBehavior: Clip.hardEdge,
                   child: Image(
-                    image: NetworkImage(widget.meal.imagePath),
+                    image: FileImage(File(widget.recipe.imagePath)),
                     height: 200,
                     fit: BoxFit.cover,
                   ),
@@ -56,9 +58,9 @@ class _MealScreenState extends State<MealScreen> {
                 height: 50,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.meal.tags.length + 1,
+                  itemCount: widget.recipe.tags.length + 1,
                   itemBuilder: (context, index) {
-                    if (index == widget.meal.tags.length) {
+                    if (index == widget.recipe.tags.length) {
                       return IconButton(
                           onPressed: () {}, icon: const Icon(Icons.add));
                     }
@@ -66,7 +68,7 @@ class _MealScreenState extends State<MealScreen> {
                       padding: const EdgeInsets.all(4.0),
                       child: Center(
                         child: Text(
-                          widget.meal.tags[index],
+                          widget.recipe.tags[index],
                           textAlign: TextAlign.center,
                           style: const TextStyle().copyWith(
                               color: Theme.of(context)
@@ -105,13 +107,13 @@ class _MealScreenState extends State<MealScreen> {
                 ],
               ),
               Text(
-                " Calories per serving: ${widget.meal.caloriesPerServing} cal"
+                " Calories per serving: ${widget.recipe.caloriesPerServing} cal"
                     .replaceAll(".0 ", " "),
               ),
               Text(
-                  " Prep time: ${formatDuration(Duration(minutes: widget.meal.prepTimeInMinutes))}"),
+                  " Prep time: ${formatDuration(Duration(minutes: widget.recipe.prepTimeInMinutes))}"),
               Text(
-                  " Cook time: ${formatDuration(Duration(minutes: widget.meal.cookTimeInMinutes))}"),
+                  " Cook time: ${formatDuration(Duration(minutes: widget.recipe.cookTimeInMinutes))}"),
 
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -121,7 +123,7 @@ class _MealScreenState extends State<MealScreen> {
                 ),
               ),
               const Divider(),
-              ...widget.meal.formatIngredients(measurementSystem).map(
+              ...widget.recipe.formatIngredients(measurementSystem).map(
                     (e) => Text(
                       "\u2022 $e",
                       style: Theme.of(context).textTheme.bodyLarge,
@@ -133,8 +135,8 @@ class _MealScreenState extends State<MealScreen> {
                     style: Theme.of(context).textTheme.headlineLarge),
               ),
               const Divider(),
-              for (var i = 0; i < widget.meal.instructions.length; i++)
-                Text("${i + 1}. ${widget.meal.instructions[i]}"),
+              for (var i = 0; i < widget.recipe.instructions.length; i++)
+                Text("${i + 1}. ${widget.recipe.instructions[i]}"),
             ],
           ),
         ),

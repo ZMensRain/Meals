@@ -1,10 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/recipe.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class RecipeCard extends StatelessWidget {
-  const RecipeCard(this.meal, {super.key, required this.onTaped});
-  final Recipe meal;
+  const RecipeCard(this.recipe, {super.key, required this.onTaped});
+  final Recipe recipe;
   final void Function() onTaped;
 
   @override
@@ -18,7 +20,7 @@ class RecipeCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Hero(
-              tag: meal.id,
+              tag: recipe.id,
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
@@ -26,7 +28,7 @@ class RecipeCard extends StatelessWidget {
                 clipBehavior: Clip.hardEdge,
                 child: FadeInImage(
                   placeholder: MemoryImage(kTransparentImage),
-                  image: NetworkImage(meal.imagePath),
+                  image: FileImage(File(recipe.imagePath)),
                   height: 200,
                   fit: BoxFit.cover,
                 ),
@@ -35,7 +37,7 @@ class RecipeCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8),
               child: Text(
-                meal.title,
+                recipe.title,
                 textAlign: TextAlign.left,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
@@ -44,7 +46,7 @@ class RecipeCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8, bottom: 6),
               child: Text(
-                "Servings: ${meal.servingSize}",
+                "Servings: ${recipe.servingSize}",
                 style: Theme.of(context).textTheme.titleLarge,
               ),
             ),
@@ -54,7 +56,7 @@ class RecipeCard extends StatelessWidget {
                 bottom: 6,
               ),
               child: Text(
-                "Prep time: ${formatDuration(Duration(minutes: meal.prepTimeInMinutes))}",
+                "Prep time: ${formatDuration(Duration(minutes: recipe.prepTimeInMinutes))}",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
@@ -64,7 +66,7 @@ class RecipeCard extends StatelessWidget {
                 bottom: 8,
               ),
               child: Text(
-                "Total time: ${formatDuration(Duration(minutes: meal.prepTimeInMinutes + meal.cookTimeInMinutes))}",
+                "Total time: ${formatDuration(Duration(minutes: recipe.prepTimeInMinutes + recipe.cookTimeInMinutes))}",
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ),
