@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/recipe.dart';
+import 'package:meal_planner/widgets/image_picker.dart';
 
 import 'package:meal_planner/widgets/sections/ingredient_section.dart';
 import 'package:meal_planner/widgets/sections/instruction_section.dart';
@@ -73,6 +76,8 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
   List<String> instructions = [];
   List<Ingredient> ingredients = [];
 
+  File? image;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,13 +98,17 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                ImagePickerCard(
+                  image,
+                  onImagePicked: (newImage) => setState(
+                    () {
+                      image = newImage;
+                    },
+                  ),
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.camera_alt),
-                    ),
                     Expanded(
                       child: TextFormField(
                         decoration: const InputDecoration(
