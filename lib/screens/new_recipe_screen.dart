@@ -41,7 +41,15 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
       );
       return false;
     }
-
+    if (image == null) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("A photo must be set"),
+        ),
+      );
+      return false;
+    }
     return true;
   }
 
