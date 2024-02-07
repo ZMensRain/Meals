@@ -108,7 +108,7 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) => MealCard(
+                    itemBuilder: (context, index) => RecipeCard(
                       snapshot.data![index],
                       onTaped: () {
                         Navigator.pop(context);

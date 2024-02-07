@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:meal_planner/model/meal.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class MealCard extends StatelessWidget {
-  const MealCard(this.meal, {super.key, required this.onTaped});
+class RecipeCard extends StatelessWidget {
+  const RecipeCard(this.meal, {super.key, required this.onTaped});
   final Recipe meal;
   final void Function() onTaped;
 

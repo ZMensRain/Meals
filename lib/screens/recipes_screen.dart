@@ -110,7 +110,7 @@ class _MealsScreenState extends State<MealsScreen> {
 
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
-                  itemBuilder: (context, index) => MealCard(
+                  itemBuilder: (context, index) => RecipeCard(
                     snapshot.data![index],
                     onTaped: () => Navigator.push(
                       context,
