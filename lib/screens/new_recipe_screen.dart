@@ -67,7 +67,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 
     var dirPath = await getApplicationDocumentsDirectory();
 
-    image!.copy(dirPath.path + p.basename(image!.path));
+    image!.copy(p.join(dirPath.path, p.basename(image!.path)));
 
     addRecipe(
       Recipe(
@@ -78,7 +78,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
         prepTimeInMinutes: _prepTime!.inMinutes,
         cookTimeInMinutes: _cookTime!.inMinutes,
         caloriesPerServing: _enteredCaloriesPerServing,
-        imagePath: dirPath.path + p.basename(image!.path),
+        imagePath: p.join(dirPath.path, p.basename(image!.path)),
       ),
     );
   }
