@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/recipe_stats.dart';
 import 'package:meal_planner/widgets/sheets/pick_tag_sheet.dart';
 
 class FilterWidget extends StatefulWidget {
-  const FilterWidget(
+  const FilterWidget(this.stats,
       {super.key,
       required this.onFilterChanged,
       this.showPlusButton = false,
@@ -22,6 +21,8 @@ class FilterWidget extends StatefulWidget {
   ) onFilterChanged;
 
   final void Function()? onPlusButton;
+
+  final RecipeStats stats;
 
   final bool showPlusButton;
 
@@ -42,29 +43,6 @@ class _FilterWidgetState extends State<FilterWidget> {
   bool isFiltering = false;
 
   final searchController = TextEditingController();
-
-  late RecipeStats recipeStats = RecipeStats(
-      maxCalories: 300,
-      minCalories: 0,
-      maxMinutes: 200,
-      minMinutes: 0,
-      tags: []);
-
-  @override
-  void initState() {
-    super.initState();
-    getRecipeStats().then(
-      (value) {
-        setState(() {
-          recipeStats = value;
-          maxCaloriesInput = value.maxCalories;
-          minCaloriesInput = value.minCalories;
-          maxMinutes = value.maxMinutes;
-          minMinutes = value.minMinutes;
-        });
-      },
-    );
-  }
 
   @override
   void dispose() {
@@ -126,15 +104,15 @@ class _FilterWidgetState extends State<FilterWidget> {
             ),
             RangeSlider(
               divisions:
-                  ((recipeStats.maxCalories - recipeStats.minCalories) * 10)
+                  ((widget.stats.maxCalories - widget.stats.minCalories) * 10)
                           .toInt() +
                       1,
               labels: RangeLabels(
                 minCaloriesInput.toString(),
                 maxCaloriesInput.toString(),
               ),
-              min: recipeStats.minCalories,
-              max: recipeStats.maxCalories,
+              min: widget.stats.minCalories,
+              max: widget.stats.maxCalories,
               values: RangeValues(minCaloriesInput, maxCaloriesInput),
               onChanged: (value) {
                 setState(() {
@@ -151,13 +129,13 @@ class _FilterWidgetState extends State<FilterWidget> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             RangeSlider(
-              divisions: recipeStats.maxMinutes,
+              divisions: widget.stats.maxMinutes,
               labels: RangeLabels(
                 "${minMinutes}min",
                 "${maxMinutes}min",
               ),
-              min: recipeStats.minMinutes.toDouble(),
-              max: recipeStats.maxMinutes.toDouble(),
+              min: widget.stats.minMinutes.toDouble(),
+              max: widget.stats.maxMinutes.toDouble(),
               values: RangeValues(minMinutes.toDouble(), maxMinutes.toDouble()),
               onChanged: (value) {
                 setState(

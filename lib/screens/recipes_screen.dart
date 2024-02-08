@@ -64,6 +64,7 @@ class _MealsScreenState extends State<MealsScreen> {
           child: Column(
             children: [
               FilterWidget(
+                recipeStats,
                 onFilterChanged: (
                   maxCalories,
                   minCalories,
