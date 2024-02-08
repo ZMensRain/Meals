@@ -149,3 +149,16 @@ Future<RecipeStats> getRecipeStats() async {
 
   return newRecipeStats;
 }
+
+Future<Week> getWeek() async {
+  var isar = await getIsar();
+  if (isar.weeks.countSync() != 0) {
+    return isar.weeks.where().findFirstSync()!;
+  }
+  isar.writeTxn(
+    () => isar.weeks.put(
+      Week(),
+    ),
+  );
+  return Week();
+}
