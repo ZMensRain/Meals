@@ -24,7 +24,8 @@ class Ingredient {
     }
 
     if (unit == Units.amount) {
-      return "$amount $name";
+      final Pluralize pluralize = Pluralize();
+      return "$amount ${amount != 1 ? pluralize.plural(name!) : pluralize.singular(name!)}";
     }
 
     late Quantity quantity;
@@ -45,11 +46,11 @@ class Ingredient {
     switch (quantity.runtimeType) {
       case Volume:
         if (system == MeasurementSystem.metric) {
-          final v = quantity.valueIn("l");
-          if (v < 1) {
+          final liters = quantity.valueIn("l");
+          if (liters < 1) {
             return "${quantity.valueIn("ml").floorToDouble()}ml $name";
           } else {
-            return ("${v.floorToDouble()}L $name");
+            return ("${liters.floorToDouble()}l $name");
           }
         } else {
           var tbsp = quantity.valueIn("tbsp");
@@ -66,7 +67,8 @@ class Ingredient {
         if (system == MeasurementSystem.metric) {
           var grams = quantity.valueIn("g");
           if (grams >= 1000) {
-            return ("${grams / 1000}kg $name");
+            var kgs = double.parse((grams / 1000).toStringAsFixed(1));
+            return ("$kgs ${kgs != 1 ? "kgs" : "kg"} $name");
           } else {
             return ("${grams}g $name");
           }
@@ -79,6 +81,7 @@ class Ingredient {
           }
         }
     }
+
     return "$amount$unit $name";
   }
 
