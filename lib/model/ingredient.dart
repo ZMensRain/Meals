@@ -1,5 +1,6 @@
 import 'package:converter/converter.dart';
 import 'package:isar/isar.dart';
+import 'package:pluralize/pluralize.dart';
 
 part 'ingredient.g.dart';
 
@@ -82,11 +83,17 @@ class Ingredient {
   }
 
   bool isSameAs(Ingredient ingredient) {
-    if (ingredient.name!
-            .toLowerCase()
-            .replaceAll(" ", "")
-            .replaceAll("\n", "") ==
-        name!.toLowerCase().replaceAll(" ", "").replaceAll("\n", "")) {
+    final pluralize = Pluralize();
+
+    if (pluralize.singular(
+          ingredient.name!
+              .toLowerCase()
+              .replaceAll(" ", "")
+              .replaceAll("\n", ""),
+        ) ==
+        pluralize.singular(
+          name!.toLowerCase().replaceAll(" ", "").replaceAll("\n", ""),
+        )) {
       return true;
     }
     return false;
