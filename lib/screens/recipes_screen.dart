@@ -15,7 +15,13 @@ class MealsScreen extends StatefulWidget {
 }
 
 class _MealsScreenState extends State<MealsScreen> {
-  late RecipeStats recipeStats;
+  RecipeStats recipeStats = RecipeStats(
+    maxCalories: 300,
+    minCalories: 0,
+    maxMinutes: 100,
+    minMinutes: 0,
+    tags: [],
+  );
 
   Stream<void> recipeStream = const Stream.empty();
   @override

@@ -45,6 +45,17 @@ class _FilterWidgetState extends State<FilterWidget> {
   final searchController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    setState(() {
+      maxCaloriesInput = widget.stats.maxCalories;
+      minCaloriesInput = widget.stats.minCalories;
+      maxMinutes = widget.stats.maxMinutes;
+      minMinutes = widget.stats.minMinutes;
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
     searchController.dispose();
