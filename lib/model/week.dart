@@ -1,7 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:isar/isar.dart';
 import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/recipe.dart';
+
+import 'package:pdf/widgets.dart' as pdf;
 
 part 'week.g.dart';
 
@@ -103,6 +107,33 @@ class Week {
     }
 
     return finalIngredients;
+  }
+
+  Future<Uint8List> getShoppingListAsPDF(MeasurementSystem system) async {
+    final pdfDocument = pdf.Document(
+      title: "Week",
+      creator: "Meal planner",
+    );
+
+    var ingredients = await getIngredients();
+
+    pdfDocument.addPage(
+      pdf.MultiPage(
+        build: (context) => [
+          pdf.Text(
+            "Shopping list",
+            style: pdf.TextStyle.defaultStyle().copyWith(
+              fontSize: 30,
+              fontWeight: pdf.FontWeight.bold,
+              fontBold: pdf.Font.timesBold(),
+            ),
+          ),
+          ...ingredients.map((e) => pdf.Bullet(text: e.format(system))),
+        ],
+      ),
+    );
+
+    return pdfDocument.save();
   }
 
   Week copyWith({
