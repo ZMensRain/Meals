@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/ingredient.dart';
-import 'package:meal_planner/model/recipe.dart';
-
-import 'package:share_plus/share_plus.dart';
 
 class ShareDialog extends StatelessWidget {
-  const ShareDialog(this.meal, {super.key});
-
-  final Recipe meal;
+  const ShareDialog({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +12,13 @@ class ShareDialog extends StatelessWidget {
       actions: [
         ElevatedButton(
           onPressed: () async {
-            final data = await meal.makePdf(MeasurementSystem.imperial);
-            final file = XFile.fromData(
-              data,
-              name: "${meal.title} recipe",
-              mimeType: "pdf",
-            );
-
-            var r = await Share.shareXFiles([file]);
-
-            if (r.status != ShareResultStatus.unavailable) {
-              if (context.mounted) {
-                Navigator.pop(context);
-                Navigator.pop(context);
-              }
-            }
+            Navigator.pop(context, MeasurementSystem.imperial);
           },
           child: const Text("Imperial"),
         ),
         ElevatedButton(
           onPressed: () async {
-            final data = await meal.makePdf(MeasurementSystem.metric);
-            final file = XFile.fromData(
-              data,
-              name: "${meal.title} recipe",
-              mimeType: "pdf",
-            );
-            Share.shareXFiles([file]);
+            Navigator.pop(context, MeasurementSystem.metric);
           },
           child: const Text("Metric"),
         ),

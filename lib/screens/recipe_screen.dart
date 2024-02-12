@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/widgets/share_dialog.dart';
+import 'package:share_plus/share_plus.dart';
 
 class MealScreen extends StatefulWidget {
   const MealScreen(this.recipe, {super.key});
@@ -23,11 +24,28 @@ class _MealScreenState extends State<MealScreen> {
         title: Text(widget.recipe.title),
         actions: [
           IconButton(
-            onPressed: () {
-              showDialog(
+            onPressed: () async {
+              var system = await showDialog<MeasurementSystem>(
                 context: context,
-                builder: (context) => ShareDialog(widget.recipe),
+                builder: (context) => const ShareDialog(),
               );
+              if (system == null) {
+                return;
+              }
+              final data = await widget.recipe.makePdf(system);
+              final file = XFile.fromData(
+                data,
+                name: "${widget.recipe.title} recipe",
+                mimeType: "pdf",
+              );
+              var r = await Share.shareXFiles([file]);
+
+              if (r.status != ShareResultStatus.unavailable) {
+                if (context.mounted) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
+              }
             },
             icon: const Icon(Icons.share),
           ),
