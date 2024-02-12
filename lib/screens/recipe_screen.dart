@@ -38,14 +38,7 @@ class _MealScreenState extends State<MealScreen> {
                 name: "${widget.recipe.title} recipe",
                 mimeType: "pdf",
               );
-              var r = await Share.shareXFiles([file]);
-
-              if (r.status != ShareResultStatus.unavailable) {
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                }
-              }
+              await Share.shareXFiles([file]);
             },
             icon: const Icon(Icons.share),
           ),
