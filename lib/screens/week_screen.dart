@@ -66,13 +66,17 @@ class _WeekScreenState extends State<WeekScreen> {
 
           if (snapshot.hasData) {
             return Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    var ing = await snapshot.data!.getIngredients();
-                    print(ing);
+                TextButton(
+                  onPressed: () {
+                    isar.writeTxn(
+                      () => isar.weeks.put(
+                        Week(),
+                      ),
+                    );
                   },
-                  child: const Text(""),
+                  child: const Text("Clear"),
                 ),
                 Expanded(
                   child: ListView.builder(
