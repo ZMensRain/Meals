@@ -31,7 +31,26 @@ class ShoppingListScreen extends StatelessWidget {
                     height: 70,
                     width: 150,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        MeasurementSystem? system = await showDialog(
+                          context: context,
+                          builder: (context) => const ShareDialog(),
+                        );
+                        if (system == null) {
+                          return;
+                        }
+
+                        var data = await week.getShoppingListAsPDF(system);
+
+                        await Share.shareXFiles(
+                          [
+                            XFile.fromData(
+                              data,
+                              mimeType: "pdf",
+                            ),
+                          ],
+                        );
+                      },
                       child: const Text("PDF"),
                     ),
                   ),
