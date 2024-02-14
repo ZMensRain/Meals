@@ -12,7 +12,7 @@ part 'recipe.g.dart';
 String formatDuration(Duration duration) {
   String twoDigits(int n) => n.toString().padLeft(2, "0");
   String twoDigitMinutes = duration.inMinutes.remainder(60).abs().toString();
-  if (twoDigits(duration.inHours) == "0") {
+  if (twoDigits(duration.inHours) == "00") {
     return "$twoDigitMinutes min";
   }
   if (twoDigitMinutes == "0") {
@@ -46,11 +46,7 @@ class Recipe {
   final String imagePath;
 
   List<String> formatIngredients(MeasurementSystem system) {
-    final List<String> output = [];
-    for (var i in ingredients) {
-      output.add(i.format(system));
-    }
-    return output;
+    return ingredients.map((e) => e.format(system)).toList();
   }
 
   Future<Uint8List> makePdf(MeasurementSystem measurementSystem) async {
@@ -182,19 +178,4 @@ Future<List<Recipe>> getRecipes({
       .not()
       .anyOf(notIncludedTags, (q, element) => q.tagsElementContains(element))
       .findAll();
-}
-
-void createShoppingList(List<Recipe> meals) {
-  throw UnimplementedError();
-  // final List<Ingredient> allIngredients = [];
-
-  // for (var meal in meals) {
-  //   allIngredients.addAll(meal.ingredients);
-  // }
-
-  // allIngredients.sort(
-  //   (a, b) => a.name.toLowerCase().trim().replaceAll("  ", " ").compareTo(
-  //         b.name.toLowerCase().trim().replaceAll("  ", " "),
-  //       ),
-  // );
 }
