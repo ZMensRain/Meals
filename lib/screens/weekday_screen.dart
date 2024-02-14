@@ -10,6 +10,7 @@ class WeekdayScreen extends StatelessWidget {
   final Weekday weekday;
   void addRecipeToDay(BuildContext context) {
     showModalBottomSheet(
+      backgroundColor: Theme.of(context).colorScheme.background,
       useSafeArea: true,
       isScrollControlled: true,
       context: context,
