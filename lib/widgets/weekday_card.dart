@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/recipe.dart';
+import 'package:meal_planner/screens/week_screen.dart';
 
 class WeekdayCard extends StatelessWidget {
   const WeekdayCard(this.day, this.recipes,
@@ -67,7 +68,8 @@ class WeekdayCard extends StatelessWidget {
                   ),
                 ),
                 const Divider(),
-                ..._getRecipeNames().map((e) => Text("\u2022 $e")),
+                ..._getRecipeNames()
+                    .map((e) => Text("\u2022 ${e.capitalize()}")),
               ],
             ),
           ),

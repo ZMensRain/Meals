@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:meal_planner/model/recipe.dart';
+import 'package:meal_planner/screens/week_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class RecipeCard extends StatelessWidget {
@@ -37,7 +38,7 @@ class RecipeCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 8, top: 8),
               child: Text(
-                recipe.title,
+                recipe.title.capitalize(),
                 textAlign: TextAlign.left,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
