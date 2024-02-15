@@ -14,33 +14,91 @@ Future<Isar> getIsar() async {
 
 void addRecipe(Recipe recipe) async {
   var isar = await getIsar();
-  var stats = await getRecipeStats();
-
-  if (stats.maxCalories < recipe.caloriesPerServing) {
-    stats = stats.copyWith(maxCalories: recipe.caloriesPerServing);
-  }
-  if (stats.minCalories > recipe.caloriesPerServing) {
-    stats = stats.copyWith(minCalories: recipe.caloriesPerServing);
-  }
-  if (stats.maxMinutes < recipe.cookTimeInMinutes) {
-    stats = stats.copyWith(maxMinutes: recipe.cookTimeInMinutes);
-  }
-  if (stats.minMinutes > recipe.cookTimeInMinutes) {
-    stats = stats.copyWith(minMinutes: recipe.cookTimeInMinutes);
-  }
-
-  for (var tag in recipe.tags) {
-    if (!stats.tags.contains(tag)) {
-      stats = stats.copyWith(tags: stats.tags + [tag]);
-    }
-  }
 
   await isar.writeTxn(() => isar.recipes.put(recipe));
-  await isar.writeTxn(() => isar.recipeStats.put(stats));
+  updateRecipeStats(recipe: recipe);
 }
 
-//TODO
-void addTag(Id recipeId) {
+void addTag(
+  Id recipeId,
+  String tag,
+) async {
+  var isar = await getIsar();
+  var recipe = (await isar.recipes.get(recipeId))!;
+
+  recipe = recipe.copyWith(
+    tags: [...recipe.tags, tag],
+  );
+
+  isar.writeTxn(
+    () => isar.recipes.put(recipe),
+  );
+  updateRecipeStats(recipe: recipe);
+}
+
+void updateRecipeStats({Recipe? recipe}) async {
+  var isar = await getIsar();
+  if (recipe != null) {
+    var stats = await getRecipeStats();
+
+    if (recipe.caloriesPerServing > stats.maxCalories) {
+      stats = stats.copyWith(maxCalories: recipe.caloriesPerServing);
+    } else if (recipe.caloriesPerServing < stats.minCalories) {
+      stats = stats.copyWith(minCalories: recipe.caloriesPerServing);
+    }
+    if (recipe.cookTimeInMinutes > stats.maxMinutes) {
+      stats = stats.copyWith(maxMinutes: recipe.cookTimeInMinutes);
+    } else if (recipe.cookTimeInMinutes < stats.minMinutes) {
+      stats = stats.copyWith(minMinutes: recipe.cookTimeInMinutes);
+    }
+
+    List<String> tagsToAdd = [];
+
+    for (var tag in recipe.tags) {
+      if (stats.tags.contains(tag) == false) {
+        tagsToAdd.add(tag);
+      }
+    }
+    stats = stats.copyWith(tags: [...stats.tags, ...tagsToAdd]);
+    await isar.writeTxn(() => isar.recipeStats.put(stats));
+    return;
+  }
+
+  var caloriesQuery =
+      isar.recipes.where().idGreaterThan(0).sortByCaloriesPerServing();
+  var minCalories = await caloriesQuery.caloriesPerServingProperty().min();
+  var maxCalories = await caloriesQuery.caloriesPerServingProperty().max();
+
+  var minMinutes = await caloriesQuery.cookTimeInMinutesProperty().min();
+  var maxMinutes = await caloriesQuery.cookTimeInMinutesProperty().max();
+
+  var listTags = await caloriesQuery.tagsProperty().findAll();
+
+  var tags = listTags.fold<List<String>>(
+    [],
+    (previousValue, element) => previousValue + (element),
+  );
+
+  minCalories ??= 0;
+  maxCalories ??= 300;
+
+  minMinutes ??= 0;
+  maxMinutes ??= 300;
+
+  var stats = RecipeStats(
+    maxCalories: maxCalories,
+    minCalories: minCalories,
+    maxMinutes: maxMinutes,
+    minMinutes: minMinutes,
+    tags: tags.toSet().toList(),
+  );
+
+  isar.writeTxn(
+    () async {
+      return isar.recipeStats.put(stats);
+    },
+  );
+
   throw UnimplementedError();
 }
 
@@ -123,15 +181,11 @@ Future<RecipeStats> getRecipeStats() async {
     (previousValue, element) => previousValue + (element),
   );
 
-  if (minCalories == null || maxCalories == null) {
-    minCalories = 0;
-    maxCalories = 100;
-  }
+  minCalories ??= 0;
+  maxCalories ??= 300;
 
-  if (minMinutes == null || maxMinutes == null) {
-    minMinutes = 0;
-    maxMinutes = 100;
-  }
+  minMinutes ??= 0;
+  maxMinutes ??= 300;
 
   var newRecipeStats = RecipeStats(
     maxCalories: maxCalories,

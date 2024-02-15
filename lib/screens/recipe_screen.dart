@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/ingredient.dart';
 import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/widgets/share_dialog.dart';
+import 'package:meal_planner/widgets/sheets/pick_tag_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MealScreen extends StatefulWidget {
@@ -73,7 +75,21 @@ class _MealScreenState extends State<MealScreen> {
                   itemBuilder: (context, index) {
                     if (index == widget.recipe.tags.length) {
                       return IconButton(
-                          onPressed: () {}, icon: const Icon(Icons.add));
+                        onPressed: () async {
+                          var tag = await showModalBottomSheet<String>(
+                            context: context,
+                            builder: (context) => const PickTagSheet(
+                              excludeTags: [],
+                            ),
+                          );
+                          if (tag == null) {
+                            return;
+                          }
+
+                          addTag(widget.recipe.id, tag);
+                        },
+                        icon: const Icon(Icons.add),
+                      );
                     }
                     return Container(
                       padding: const EdgeInsets.all(4.0),
