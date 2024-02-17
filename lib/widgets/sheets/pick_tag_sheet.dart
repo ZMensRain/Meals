@@ -20,7 +20,9 @@ class _PickTagSheetState extends State<PickTagSheet> {
 
     getRecipeStats().then(
       (value) {
-        tags = value.tags;
+        setState(() {
+          tags = value.tags;
+        });
       },
     );
   }
