@@ -196,6 +196,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                         includedTags.removeAt(index);
                       },
                     );
+                    update();
                   },
                   child: Text(includedTags[index]),
                 ),
@@ -238,6 +239,7 @@ class _FilterWidgetState extends State<FilterWidget> {
                     setState(
                       () => excludedTags.removeAt(index),
                     );
+                    update();
                   },
                   child: Text(
                     excludedTags[index],
