@@ -19,6 +19,14 @@ class MealScreen extends StatefulWidget {
 class _MealScreenState extends State<MealScreen> {
   MeasurementSystem measurementSystem = MeasurementSystem.metric;
 
+  List<String> tags = [];
+
+  @override
+  void initState() {
+    super.initState();
+    tags.addAll(widget.recipe.tags);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,9 +79,9 @@ class _MealScreenState extends State<MealScreen> {
                 height: 50,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.recipe.tags.length + 1,
+                  itemCount: tags.length + 1,
                   itemBuilder: (context, index) {
-                    if (index == widget.recipe.tags.length) {
+                    if (index == tags.length) {
                       return IconButton(
                         onPressed: () async {
                           var tag = await showModalBottomSheet<String>(
@@ -85,7 +93,9 @@ class _MealScreenState extends State<MealScreen> {
                           if (tag == null) {
                             return;
                           }
-
+                          setState(() {
+                            tags.add(tag);
+                          });
                           addTag(widget.recipe.id, tag);
                         },
                         icon: const Icon(Icons.add),
@@ -95,7 +105,7 @@ class _MealScreenState extends State<MealScreen> {
                       padding: const EdgeInsets.all(4.0),
                       child: Center(
                         child: Text(
-                          widget.recipe.tags[index],
+                          tags[index],
                           textAlign: TextAlign.center,
                           style: const TextStyle().copyWith(
                               color: Theme.of(context)
