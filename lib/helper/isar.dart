@@ -148,6 +148,39 @@ void addRecipeToWeekday(Id recipeId, Weekday day) async {
   isar.writeTxn(() => isar.weeks.put(week));
 }
 
+void removeRecipeFromWeekday(int recipeId, Weekday day) async {
+  var isar = await getIsar();
+
+  var week = await getWeek();
+  var newList =
+      week.getRecipeIds(day).where((element) => element != recipeId).toList();
+
+  switch (day) {
+    case Weekday.monday:
+      week = week.copyWith(monday: newList);
+      break;
+    case Weekday.tuesday:
+      week = week.copyWith(tuesday: newList);
+      break;
+    case Weekday.wednesday:
+      week = week.copyWith(wednesday: newList);
+      break;
+    case Weekday.thursday:
+      week = week.copyWith(thursday: newList);
+      break;
+    case Weekday.friday:
+      week = week.copyWith(friday: newList);
+      break;
+    case Weekday.saturday:
+      week = week.copyWith(saturday: newList);
+      break;
+    case Weekday.sunday:
+      week = week.copyWith(sunday: newList);
+      break;
+  }
+  isar.writeTxn(() => isar.weeks.put(week));
+}
+
 Future<List<Recipe>> getRecipesForWeekday(Weekday day) async {
   var isar = await getIsar();
   var week = isar.weeks.getSync(1);
