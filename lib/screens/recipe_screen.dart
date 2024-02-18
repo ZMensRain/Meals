@@ -86,8 +86,8 @@ class _MealScreenState extends State<MealScreen> {
                         onPressed: () async {
                           var tag = await showModalBottomSheet<String>(
                             context: context,
-                            builder: (context) => const PickTagSheet(
-                              excludeTags: [],
+                            builder: (context) => PickTagSheet(
+                              excludeTags: tags,
                             ),
                           );
                           if (tag == null) {
