@@ -49,7 +49,33 @@ class WeekdayScreen extends StatelessWidget {
             ),
           );
         },
-        onLongPress: (recipe) {},
+        onLongPress: (recipe) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(recipe.title),
+              content: Text(
+                "Would you like to remove this recipe from ${weekday.name.capitalize()}?",
+                textAlign: TextAlign.center,
+              ),
+              actions: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                      foregroundColor: Theme.of(context).colorScheme.secondary),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("Cancel"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    removeRecipeFromWeekday(recipe.id, weekday);
+                    Navigator.pop(context);
+                  },
+                  child: const Text("Yes"),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
