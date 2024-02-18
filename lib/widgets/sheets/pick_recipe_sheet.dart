@@ -37,6 +37,8 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
       minMinutes: 0,
       tags: []);
 
+  Key filterWidgetKey = const ValueKey("filter");
+
   @override
   void initState() {
     super.initState();
@@ -45,6 +47,9 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
       (value) {
         setState(
           () {
+            filterWidgetKey = const ValueKey("filters");
+            stats = value;
+
             minCalories = value.minCalories;
 
             maxCalories = value.maxCalories;
@@ -70,6 +75,7 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
             style: Theme.of(context).textTheme.headlineMedium,
           ),
           FilterWidget(
+            key: filterWidgetKey,
             stats,
             onFilterChanged: (
               maxCalories,

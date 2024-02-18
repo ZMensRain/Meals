@@ -25,6 +25,9 @@ class _MealsScreenState extends State<MealsScreen> {
   );
 
   Stream<void> recipeStream = const Stream.empty();
+
+  Key filterWidgetKey = const ValueKey("filter");
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +38,7 @@ class _MealsScreenState extends State<MealsScreen> {
       (value) {
         recipeStats = value;
         setState(() {
+          filterWidgetKey = const ValueKey("filters");
           minCalories = value.minCalories;
           maxCalories = value.maxCalories;
           minMinutes = value.minMinutes;
@@ -71,6 +75,7 @@ class _MealsScreenState extends State<MealsScreen> {
           child: Column(
             children: [
               FilterWidget(
+                key: filterWidgetKey,
                 recipeStats,
                 onFilterChanged: (
                   maxCalories,
