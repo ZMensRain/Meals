@@ -19,6 +19,11 @@ void addRecipe(Recipe recipe) async {
   updateRecipeStats(recipe: recipe);
 }
 
+void deleteRecipe(Recipe recipe) async {
+  var isar = await getIsar();
+  isar.writeTxn(() => isar.recipes.delete(recipe.id));
+}
+
 void addTag(
   Id recipeId,
   String tag,
