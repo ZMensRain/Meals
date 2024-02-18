@@ -4,7 +4,7 @@ import 'package:meal_planner/helper/isar.dart';
 import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/model/recipe_stats.dart';
 import 'package:meal_planner/widgets/filter_widget.dart';
-import 'package:meal_planner/widgets/recipe_card.dart';
+import 'package:meal_planner/widgets/recipe_list.dart';
 
 class PickRecipeSheet extends StatefulWidget {
   const PickRecipeSheet({super.key, required this.onPickRecipe});
@@ -97,62 +97,23 @@ class _PickRecipeSheetState extends State<PickRecipeSheet> {
               );
             },
           ),
-          FutureBuilder(
-            future: getRecipes(
-              title: title,
-              includedTags: includedTags,
-              notIncludedTags: excludedTags,
-              minCalories: minCalories,
-              maxCalories: maxCalories,
-              minMinutes: minMinutes,
-              maxMinutes: maxMinutes,
+          Expanded(
+            child: RecipeList(
+              recipeFuture: getRecipes(
+                title: title,
+                includedTags: includedTags,
+                notIncludedTags: excludedTags,
+                minCalories: minCalories,
+                maxCalories: maxCalories,
+                minMinutes: minMinutes,
+                maxMinutes: maxMinutes,
+              ),
+              onTap: (Recipe recipe) {
+                Navigator.pop(context);
+                widget.onPickRecipe(recipe.id);
+              },
+              onLongPress: (recipe) {},
             ),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                );
-              }
-
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text("Something went wrong\n ${snapshot.error}"),
-                );
-              }
-              if (snapshot.hasData) {
-                if (snapshot.data!.isEmpty) {
-                  return const Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Sorry we couldn't find anything...",
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return Expanded(
-                  child: ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) => RecipeCard(
-                      snapshot.data![index],
-                      onTaped: () {
-                        Navigator.pop(context);
-                        widget.onPickRecipe(snapshot.data![index].id);
-                      },
-                    ),
-                  ),
-                );
-              }
-              return const Center(
-                child: Text("Something went wrong"),
-              );
-            },
           ),
         ],
       ),

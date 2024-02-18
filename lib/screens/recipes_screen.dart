@@ -5,7 +5,8 @@ import 'package:meal_planner/model/recipe_stats.dart';
 import 'package:meal_planner/screens/recipe_screen.dart';
 import 'package:meal_planner/screens/new_recipe_screen.dart';
 import 'package:meal_planner/widgets/filter_widget.dart';
-import 'package:meal_planner/widgets/recipe_card.dart';
+
+import 'package:meal_planner/widgets/recipe_list.dart';
 
 class MealsScreen extends StatefulWidget {
   const MealsScreen({super.key});
@@ -99,8 +100,8 @@ class _MealsScreenState extends State<MealsScreen> {
                 ),
               ),
               Expanded(
-                child: FutureBuilder(
-                  future: getRecipes(
+                child: RecipeList(
+                  recipeFuture: getRecipes(
                     title: title,
                     includedTags: includedTags,
                     notIncludedTags: excludedTags,
@@ -109,42 +110,13 @@ class _MealsScreenState extends State<MealsScreen> {
                     minMinutes: minMinutes,
                     maxMinutes: maxMinutes,
                   ),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                          child: CircularProgressIndicator.adaptive());
-                    }
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(snapshot.error.toString()),
-                      );
-                    }
-
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: Text("Something went wrong"),
-                      );
-                    }
-                    if (snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text("Sorry we couldn't find anything..."),
-                      );
-                    }
-
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) => RecipeCard(
-                        snapshot.data![index],
-                        onTaped: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                MealScreen(snapshot.data![index]),
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                  onTap: (recipe) => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MealScreen(recipe),
+                    ),
+                  ),
+                  onLongPress: (recipe) {},
                 ),
               ),
             ],

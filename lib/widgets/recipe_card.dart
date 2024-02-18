@@ -6,9 +6,15 @@ import 'package:meal_planner/screens/week_screen.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class RecipeCard extends StatelessWidget {
-  const RecipeCard(this.recipe, {super.key, required this.onTaped});
+  const RecipeCard(
+    this.recipe, {
+    super.key,
+    required this.onTaped,
+    required this.onLongPress,
+  });
   final Recipe recipe;
   final void Function() onTaped;
+  final void Function() onLongPress;
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,7 @@ class RecipeCard extends StatelessWidget {
       margin: const EdgeInsets.all(8),
       clipBehavior: Clip.hardEdge,
       child: InkWell(
+        onLongPress: onLongPress,
         onTap: onTaped,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
