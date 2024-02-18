@@ -116,7 +116,37 @@ class _MealsScreenState extends State<MealsScreen> {
                       builder: (context) => MealScreen(recipe),
                     ),
                   ),
-                  onLongPress: (recipe) {},
+                  onLongPress: (recipe) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(recipe.title),
+                        content: const Text(
+                          "Would you like to delete this recipe? \n This action cannot be undone.",
+                          textAlign: TextAlign.center,
+                        ),
+                        actions: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.secondary),
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("cancel"),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor:
+                                    Theme.of(context).colorScheme.error),
+                            onPressed: () {
+                              deleteRecipe(recipe);
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Delete"),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
