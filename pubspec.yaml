@@ -22,6 +22,8 @@ dependencies:
   path:
   pluralize: ^0.0.8
   uuid: ^4.3.3
+  rename: ^3.0.1
+ 
 
 
 dev_dependencies:
@@ -30,7 +32,15 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   isar_generator: ^3.1.0+1
   build_runner: ^2.4.7
+  flutter_launcher_icons: ^0.13.1
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/meals_icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_foreground: "assets/meals_icon.png"
+  adaptive_icon_background: "assets/meals_icon_background.png"
 
 flutter:
   uses-material-design: true
