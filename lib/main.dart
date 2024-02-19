@@ -27,7 +27,7 @@ class MainApp extends StatelessWidget {
           onBackground: Colors.white,
           surface: Color.fromARGB(255, 20, 20, 20),
           onSurface: Colors.white,
-          surfaceTint: Color.fromRGBO(255, 255, 255, 1),
+          surfaceTint: Color.fromARGB(255, 255, 255, 255),
           tertiary: Color.fromARGB(255, 40, 215, 109),
         ),
         appBarTheme: const AppBarTheme().copyWith(
@@ -49,7 +49,7 @@ class MainApp extends StatelessWidget {
           onBackground: Color.fromARGB(255, 0, 0, 0),
           surface: Color.fromARGB(255, 241, 241, 241),
           onSurface: Color.fromARGB(255, 0, 0, 0),
-          surfaceTint: Color.fromRGBO(27, 27, 27, 1),
+          surfaceTint: Color.fromARGB(255, 27, 27, 27),
           tertiary: Color.fromARGB(255, 40, 215, 109),
         ),
         appBarTheme: const AppBarTheme().copyWith(
