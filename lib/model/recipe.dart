@@ -1,11 +1,9 @@
 import 'dart:typed_data';
-
 import 'package:flutter/services.dart';
 import 'package:isar/isar.dart';
-import 'package:meal_planner/helper/isar.dart';
-import 'package:meal_planner/model/ingredient.dart';
-
 import 'package:pdf/widgets.dart' as pdf;
+
+import 'package:meal_planner/model/ingredient.dart';
 
 part 'recipe.g.dart';
 
@@ -45,10 +43,11 @@ class Recipe {
   final List<String> tags;
   final String imagePath;
 
-  List<String> formatIngredients(MeasurementSystem system) {
-    return ingredients.map((e) => e.format(system)).toList();
-  }
+  /// returns all the ingredients formatted with the passed [MeasurementSystem].
+  List<String> formatIngredients(MeasurementSystem system) =>
+      ingredients.map((e) => e.format(system)).toList();
 
+  /// Returns this [Recipe] as a pdf file.
   Future<Uint8List> makePdf(MeasurementSystem measurementSystem) async {
     final pdfDocument = pdf.Document(
       title: title,
@@ -105,8 +104,12 @@ class Recipe {
           ),
           pdf.Divider(endIndent: 8),
           ...formatIngredients(measurementSystem).map(
-            (e) => pdf.Text(e,
-                style: const pdf.TextStyle().copyWith(fontSize: 15)),
+            (e) => pdf.Text(
+              e,
+              style: const pdf.TextStyle().copyWith(
+                fontSize: 15,
+              ),
+            ),
           ),
           pdf.SizedBox(height: 8),
           pdf.Text(
@@ -119,8 +122,12 @@ class Recipe {
           ),
           pdf.Divider(endIndent: 8),
           for (var i = 0; i < instructions.length; i++)
-            pdf.Text("${i + 1}. ${instructions[i]}",
-                style: const pdf.TextStyle().copyWith(fontSize: 13)),
+            pdf.Text(
+              "${i + 1}. ${instructions[i]}",
+              style: const pdf.TextStyle().copyWith(
+                fontSize: 13,
+              ),
+            ),
         ],
       ),
     );
@@ -128,6 +135,9 @@ class Recipe {
     return pdfDocument.save();
   }
 
+  /// Copies this recipe with new values.
+  ///
+  /// NOTE: id does not change
   Recipe copyWith({
     String? title,
     int? servingSize,
@@ -153,29 +163,4 @@ class Recipe {
     r.id = id;
     return r;
   }
-}
-
-Future<List<Recipe>> getRecipes({
-  required String title,
-  required List<String> includedTags,
-  required List<String> notIncludedTags,
-  required double minCalories,
-  required double maxCalories,
-  required int minMinutes,
-  required int maxMinutes,
-}) async {
-  var isar = await getIsar();
-
-  return isar.recipes
-      .filter()
-      .titleContains(title, caseSensitive: false)
-      .caloriesPerServingBetween(minCalories, maxCalories)
-      .cookTimeInMinutesBetween(minMinutes, maxMinutes)
-      .anyOf(
-        includedTags,
-        (q, element) => q.tagsElementContains(element),
-      )
-      .not()
-      .anyOf(notIncludedTags, (q, element) => q.tagsElementContains(element))
-      .findAll();
 }
