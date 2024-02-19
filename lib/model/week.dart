@@ -40,7 +40,10 @@ class Week {
   final List<Id> saturday;
   final List<Id> sunday;
 
-  List<Id> getRecipeIds(Weekday weekday) {
+  /// Returns the list with the same name as the weekday passed.
+  ///
+  /// If null is passed it returns all recipe ids for that week.
+  List<Id> getRecipeIds(Weekday? weekday) {
     switch (weekday) {
       case Weekday.monday:
         return monday;
@@ -57,61 +60,58 @@ class Week {
       case Weekday.sunday:
         return sunday;
       default:
-        return [];
+        return monday +
+            tuesday +
+            wednesday +
+            thursday +
+            friday +
+            saturday +
+            sunday;
     }
   }
 
+  /// Returns all unique [Ingredient]s adding all the [Ingredient]s
+  /// that are the same
   Future<List<Ingredient>> getIngredients() async {
-    var f = Weekday.values.map((e) => getRecipeIds(e)).toList();
-    List<Id> ids =
-        f.fold([], (previousValue, element) => previousValue + element);
+    List<int> ids = getRecipeIds(null);
 
     List<Recipe?> recipes = (await getIsar()).recipes.getAllSync(ids);
 
-    List<Ingredient> ingredients = recipes
-        .map(
-      (e) => e?.ingredients,
-    )
-        .fold(
-      [],
-      (previousValue, element) {
-        if (element == null) {
-          return previousValue;
-        }
-        return previousValue + element;
-      },
-    );
+    List<Ingredient> nonUniqueIngredients = [];
 
-    ingredients.sort(
-      (a, b) => a.name!.toLowerCase().compareTo(b.name!.toLowerCase()),
-    );
+    for (var recipe in recipes) {
+      if (recipe != null) {
+        nonUniqueIngredients.addAll(recipe.ingredients);
+      }
+    }
 
-    List<Ingredient> finalIngredients = [];
+    List<Ingredient> ingredients = [];
 
-    for (var ingredient in ingredients) {
+    for (var ingredient in nonUniqueIngredients) {
       bool exists = false;
 
       // checks if the ingredient is all ready in the finalIngredients list.
       // If it is adds the ingredient to the the saved one.
-      for (var i = 0; i < finalIngredients.length; i++) {
-        if (ingredient.isSameAs(finalIngredients[i])) {
-          finalIngredients[i] = ingredient.add(finalIngredients[i]);
+      for (var i = 0; i < ingredients.length; i++) {
+        if (ingredient.isSameAs(ingredients[i])) {
+          ingredients[i] = ingredient.add(ingredients[i]);
           exists = true;
           break;
         }
       }
 
       if (!exists) {
-        finalIngredients.add(ingredient);
+        ingredients.add(ingredient);
       }
     }
 
-    return finalIngredients;
+    return ingredients;
   }
 
+  /// Returns the shopping list for this week as a pdf file
   Future<Uint8List> getShoppingListAsPDF(MeasurementSystem system) async {
     final pdfDocument = pdf.Document(
-      title: "Week",
+      title: "Shopping list",
       creator: "Meal planner",
     );
 
