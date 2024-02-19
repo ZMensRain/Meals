@@ -24,10 +24,69 @@ class ImagePickerCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () async {
-          var picker = ImagePicker();
-          var file = await picker.pickImage(
-            source: ImageSource.camera,
+          // SafeArea(
+          //         child: Container(
+          //           child: new Wrap(
+          //             children: <Widget>[
+          //               new ListTile(
+          //                   leading: new Icon(Icons.photo_library),
+          //                   title: new Text('Photo Library'),
+          //                   onTap: () {
+          //                     _imgFromGallery();
+          //                     Navigator.of(context).pop();
+          //                   }),
+          //               new ListTile(
+          //                 leading: new Icon(Icons.photo_camera),
+          //                 title: new Text('Camera'),
+          //                 onTap: () {
+          //                   _imgFromCamera();
+          //                   Navigator.of(context).pop();
+          //                 },
+          //               ),
+          //             ],
+          //           ),
+          //         ),
+          //       );
+          //     }
+          //   );
+
+          var useCamera = await showModalBottomSheet<bool>(
+            clipBehavior: Clip.hardEdge,
+            context: context,
+            builder: (context) => SafeArea(
+              child: Wrap(
+                children: [
+                  ListTile(
+                    title: const Text("Camera"),
+                    onTap: () {
+                      Navigator.pop(context, true);
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Gallery"),
+                    onTap: () {
+                      Navigator.pop(context, false);
+                    },
+                  ),
+                ],
+              ),
+            ),
           );
+          if (useCamera == null) {
+            return;
+          }
+          var picker = ImagePicker();
+          XFile? file;
+
+          if (useCamera) {
+            file = await picker.pickImage(
+              source: ImageSource.camera,
+            );
+          } else {
+            file = await picker.pickImage(
+              source: ImageSource.gallery,
+            );
+          }
           if (file == null) {
             return;
           }
