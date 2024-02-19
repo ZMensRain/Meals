@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:isar/isar.dart';
 import 'package:meal_planner/model/recipe.dart';
 import 'package:meal_planner/model/recipe_stats.dart';
@@ -22,6 +24,7 @@ void addRecipe(Recipe recipe) async {
 void deleteRecipe(Recipe recipe) async {
   var isar = await getIsar();
   isar.writeTxn(() => isar.recipes.delete(recipe.id));
+  await File(recipe.imagePath).delete();
 }
 
 void addTag(
