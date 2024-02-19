@@ -21,6 +21,7 @@ dependencies:
   transparent_image: ^2.0.1
   path:
   pluralize: ^0.0.8
+  uuid: ^4.3.3
 
 
 dev_dependencies:

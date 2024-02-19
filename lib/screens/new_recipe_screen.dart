@@ -12,6 +12,9 @@ import 'package:meal_planner/widgets/sections/instruction_section.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
+
+Uuid uuid = const Uuid();
 
 class NewRecipeScreen extends StatefulWidget {
   const NewRecipeScreen({super.key});
@@ -67,7 +70,9 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
 
     var dirPath = await getApplicationDocumentsDirectory();
 
-    image!.copy(p.join(dirPath.path, p.basename(image!.path)));
+    String filename = "${uuid.v4()}${p.basename(image!.path).split(".")[1]}";
+
+    image!.copy(p.join(dirPath.path, filename));
 
     addRecipe(
       Recipe(
@@ -78,7 +83,7 @@ class _NewRecipeScreenState extends State<NewRecipeScreen> {
         prepTimeInMinutes: _prepTime!.inMinutes,
         cookTimeInMinutes: _cookTime!.inMinutes,
         caloriesPerServing: _enteredCaloriesPerServing,
-        imagePath: p.join(dirPath.path, p.basename(image!.path)),
+        imagePath: p.join(dirPath.path, filename),
       ),
     );
   }
